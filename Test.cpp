@@ -10,7 +10,6 @@ void menu()
 void clicker()
 {
 	bool click = false;
-    int step = 0;
  
 	while (true)
 	{
@@ -26,8 +25,11 @@ void clicker()
 		{
 			SetCursorPos(0, 0);
 			mouse_event(MOUSEEVENTF_LEFTDOWN, 0, 0, 0, 0);
-            Sleep(1000);
-            step++;
+			if (GetAsyncKeyState(VK_LBUTTON)){
+				Sleep(1000);
+			}
+			mouse_event(MOUSEEVENTF_LEFTUP, 0, 0, 0, 0);
+			Sleep(1000);
 		}
 	}
 }		

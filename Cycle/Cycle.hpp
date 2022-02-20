@@ -3,14 +3,12 @@
 
 class Cycle {
 private:
-    int _delay;
-    int _numberClicks;
-    int _duration;
 
 public:
     Cycle();
     ~Cycle() = default;
     void listener();
+    void instructions(int _delay, int _numberClicks, int _duration);
 };
 
 #endif // CYCLE_HPP
