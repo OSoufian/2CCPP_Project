@@ -1,0 +1,1 @@
+GetAsyncKeyState --> permet de savoir si un bouton ou une touche clavier est cliquée ou pas
