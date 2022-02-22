@@ -4,14 +4,17 @@
 #include <vector>
 
 #include "../Task/Task.hpp"
-class Clicker {
+#include "../History/History.hpp"
+class Clicker
+{
 private:
     std::vector<Task> _tasks;
-    
-    
+    std::vector<History> _histories;
+
 public:
     Clicker();
     ~Clicker() = default;
+    void displayTasks();
 };
 
-#endif //CLICKER_HPP
+#endif // CLICKER_HPP

@@ -4,66 +4,95 @@
 
 using namespace std;
 
-char mainMenu();
-// char tasksListMenu();
-// void getTasksListAction(char action);
-void getMainAction(char action);
+void mainMenu();
+bool getMainAction(char action);
 
-char mainMenu() {
+void tasksListMenu();
+bool getTasksListAction(char action);
+
+void mainMenu()
+{
     char action;
-    cout << "<------------ Bienvenue dans SUPINFO Auto Clicker ------------>\n\n";
-    cout << "Voir la liste des taches [V]\n";
-    cout << "Modifier une tache [M]\n";
-    cout << "Lancer une tache [L]\n";
-    cin >> action;
-    return action;
+    bool valid = false;
+    do
+    {
+        system("cls");
+        cout << "<------------ Bienvenue dans SUPINFO Auto Clicker ------------>\n\n";
+        cout << "Voir la liste des taches [V]\n";
+        cout << "Ajouter une tache [A]\n";
+        cout << "Modifier une tache [M]\n";
+        cout << "Lancer une tache [L]\n";
+        cin >> action;
+        valid = getMainAction(action);
+    } while (!valid);
 }
 
-// char tasksListMenu() {
-//     char action;
-//     cout << "<------------ Voici la liste des tâches ------------>\n\n";
-//     // SUPINFOAutoClicker.displayTasks()
-//     cout << "Retour [R]";
-//     cin >> action;
-//     return action;
-// }
-
-// void getTasksListAction(char action) {
-//     system("cls");
-//     switch (action) {
-//         case 'R':
-//             char action = mainMenu();    
-//             getMainAction(action);
-//             break;    
-//     }
-// }
-
-void getMainAction(char action) {
-    system("cls");
-    switch (action) {
-        case 'V':
-            // char action = tasksListMenu();
-            // getTasksListAction(action);
-            cout << "Vous avez appuye sur V";
-            break;
-        
-        case 'M':            
-            // 
-            break;
-
-        case 'L':
-            // 
-            break;        
+bool getMainAction(char action)
+{
+    switch (action)
+    {
+    case 'v':
+    case 'V':
+    {
+        tasksListMenu();
+        // cout << "Vous avez appuye sur V";
+        return true;
+        break;
     }
 
+    case 'a':
+    case 'A':
+        return true;
+        break;
+
+    case 'm':
+    case 'M':
+        return true;
+        break;
+
+    case 'l':
+    case 'L':
+        return true;
+        break;
+
+    default:
+        return false;
+    }
 }
 
+void tasksListMenu()
+{
+    char action;
+    bool valid = false;
+    do
+    {
+        system("cls");
+        cout << "<------------ Voici la liste des taches ------------>\n\n";
+        // SUPINFOAutoClicker
+        cout << "Retour [R]\n";
+        cin >> action;
+        valid = getTasksListAction(action);
+    } while (!valid);
+}
 
+bool getTasksListAction(char action)
+{
+    system("cls");
+    switch (action)
+    {
+    case 'r':
+    case 'R':
+        mainMenu();
+        return true;
+        break;
+    default:
+        return false;
+    }
+}
 
-int main() {
+int main()
+{
     Clicker SUPINFOAutoClicker();
-    char action = mainMenu();    
-    getMainAction(action);
+    mainMenu();
     return 0;
 }
-
