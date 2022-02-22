@@ -3,20 +3,19 @@
 
 #include <vector>
 
-enum Type {
-    RIGHTCLICK,
-    LEFTCLICK
-};
+// enum Type {
+//     RIGHTCLICK,
+//     LEFTCLICK
+// };
 
 class Click {
     private:
-        Type _type;
-        int duration;
-        int x;
-        int y;
+        // Type _type;
+        int _duration;
+        int _position[2];
 
     public:
-        Click();
+        Click(int duration, int x, int y);
         ~Click() = default;
                 
 };

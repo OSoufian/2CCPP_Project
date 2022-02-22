@@ -1,19 +1,42 @@
 #include <iostream>
+#include <string>
 #include "Task/Task.hpp"
 #include "Clicker/Clicker.hpp"
 
 using namespace std;
 
+Clicker SUPINFOAutoClicker;
+
 void mainMenu();
-bool getMainAction(char action);
+bool getMainAction(string action);
 
 void tasksListMenu();
-bool getTasksListAction(char action);
+bool getTasksListAction();
+
+void addTaskMenu();
+bool getAddTaskAction();
+
+bool isDigit(string input);
+
+bool isDigit(string input)
+{
+    for (int i = 0; i < input.size(); i++)
+    {
+        if (!isdigit(input[i]))
+            return false;
+    }
+    return true;
+}
 
 void mainMenu()
 {
-    char action;
+    string action;
     bool valid = false;
+
+    string test = "44";
+    int ee = stoi(test);
+    cout << ee << endl;
+
     do
     {
         system("cls");
@@ -22,41 +45,40 @@ void mainMenu()
         cout << "Ajouter une tache [A]\n";
         cout << "Modifier une tache [M]\n";
         cout << "Lancer une tache [L]\n";
+        cout << "Quitter [Q]\n";
         cin >> action;
         valid = getMainAction(action);
     } while (!valid);
 }
 
-bool getMainAction(char action)
+bool getMainAction(string action)
 {
-    switch (action)
-    {
-    case 'v':
-    case 'V':
+
+    if (action == "V" || action == "v")
     {
         tasksListMenu();
-        // cout << "Vous avez appuye sur V";
         return true;
-        break;
     }
-
-    case 'a':
-    case 'A':
+    else if (action == "A" || action == "a")
+    {
+        addTaskMenu();
         return true;
-        break;
-
-    case 'm':
-    case 'M':
+    }
+    else if (action == "M" || action == "m")
+    {
         return true;
-        break;
-
-    case 'l':
-    case 'L':
+    }
+    else if (action == "L" || action == "l")
+    {
         return true;
-        break;
-
-    default:
-        return false;
+    }
+    else if (action == "Q" || action == "q")
+    {
+        exit(0);
+    }
+    else
+    {
+        return true;
     }
 }
 
@@ -68,10 +90,11 @@ void tasksListMenu()
     {
         system("cls");
         cout << "<------------ Voici la liste des taches ------------>\n\n";
-        // SUPINFOAutoClicker
-        cout << "Retour [R]\n";
+        SUPINFOAutoClicker.displayTasks();
+        cout << "Retour au menu principal [R]\n";
+        cout << "Quitter [Q]\n\n";
         cin >> action;
-        valid = getTasksListAction(action);
+        // valid = getTasksListAction();
     } while (!valid);
 }
 
@@ -90,9 +113,87 @@ bool getTasksListAction(char action)
     }
 }
 
+void addTaskMenu()
+{
+    char action;
+    bool valid = false;
+
+    string taskName;
+    string duration;
+    string numberClicks;
+    string delay;
+    string pos[2];
+
+    system("cls");
+    cout << "<------------ Création d'une tache ------------>\n\n";
+    cout << "Retour au menu principal [R]\n";
+    cout << "Quitter [Q]\n\n";
+    cout << "Quel est le nom de la tâche ?\n";
+    cin >> taskName;
+
+    // ------------------ Instructions pour un clique ------------------ //
+    system("cls");
+    cout << "Quel est le nombre de cliques que tu veux?\n";
+    do
+    {
+        cin >> numberClicks;
+        valid = isDigit(numberClicks);
+    } while (!valid);
+
+    cout << "Quel est la durée de ton clique?\n";
+    do
+    {
+        valid = false;
+        cin >> duration;
+        valid = isDigit(duration);
+    } while (!valid);
+
+    // cout << "Quel est le nombre de secondes entre 2 cliques?\n";
+    // do
+    // {
+    //     valid = false;
+    //     cin >> delay;
+    //     valid = isDigit(delay);
+    // } while (!valid);
+    cout << "Quel est la position de ton clique? (en coordonnées x et y ( de gauche à droite de haut en bas ))\n";
+    do
+    {
+        valid = false;
+        cin >> pos[0];
+        cin >> pos[1];
+        valid = (isDigit(pos[0]) && isDigit(pos[1]));
+    } while (!valid);
+
+    
+    Click click(stoi(duration), stoi(pos[0]), stoi(pos[1]));
+    Cycle cycle;
+    cycle.setClick(click);
+    Task task(taskName, cycle);
+    SUPINFOAutoClicker.setTask(task);
+
+    mainMenu();
+}
+
+bool getAddTaskAction(string name)
+{
+    system("cls");
+    if (name == "R" || name == "r")
+    {
+        mainMenu();
+        return true;
+    }
+    else if (name == "Q" || name == "q")
+    {
+        exit(0);
+    }
+    else
+    {
+        return true;
+    }
+}
+
 int main()
 {
-    Clicker SUPINFOAutoClicker();
     mainMenu();
     return 0;
 }

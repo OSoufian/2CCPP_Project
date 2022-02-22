@@ -24,3 +24,7 @@ void Task::display()
 void Task::run()
 {
 }
+
+std::string Task::getName() {
+    return this->_name;
+}

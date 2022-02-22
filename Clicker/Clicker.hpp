@@ -15,6 +15,7 @@ public:
     Clicker();
     ~Clicker() = default;
     void displayTasks();
+    void setTask(Task task);
 };
 
 #endif // CLICKER_HPP

@@ -17,6 +17,7 @@ class Task {
         void setName(std::string name);
         void display();
         void run();
+        std::string getName();
 };
 
 #endif // TASK_HPP

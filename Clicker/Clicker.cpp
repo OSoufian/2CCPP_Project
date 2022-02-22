@@ -5,10 +5,17 @@ Clicker::Clicker()
 {
 }
 
-// void Clicker::displayTasks()
-// {
-//     for (int i = 0; i < clicker.getTasks().size(); i++)
-//     {
-//         cout << clicker.getTasks()[i] << endl;
-//     }
-// }
+void Clicker::setTask(Task task) {
+    this->_tasks.push_back(task);
+
+}
+
+void Clicker::displayTasks()
+{
+    // for (int i = 0; i < ; i++)
+    // {
+    //     cout <<  << endl;
+    // }
+
+    this->_tasks[0].getName();
+}
