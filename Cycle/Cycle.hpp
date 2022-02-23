@@ -12,9 +12,8 @@ class Cycle {
     public:
         Cycle();
         ~Cycle() = default;
-        void listener();
-        void instructions(int _delay, int _numberClicks, int _duration);
         void setClick(Click click);
+        std::vector<Click> getClicks();
 };
 
 #endif // CYCLE_HPP

@@ -7,17 +7,20 @@ class Task {
     private:
         std::string _name;
         Cycle _cycle;
-        int _cycleRepetition;
-        int _delay;
+        int _cycleRepetitions;
+        int _timeInterval;
         time_t _delayedExecution;
 
     public:
-        Task(std::string name, Cycle cycle, int cycleRepetition = 0, int delay = 0, time_t delayedExecution = 0);
+        Task(std::string name, Cycle cycle, int cycleRepetitions, int timeInterval = 0, time_t delayedExecution = 0);
         ~Task() = default;
+        std::string getName();
         void setName(std::string name);
+        Cycle getCycle();
+        int getCycleRepetitions();
+        int getTimeInterval();
         void display();
         void run();
-        std::string getName();
 };
 
 #endif // TASK_HPP
