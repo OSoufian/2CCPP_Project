@@ -2,6 +2,7 @@
 #include <string>
 #include "Task/Task.hpp"
 #include "Clicker/Clicker.hpp"
+#include "Cycle/Cycle.hpp"
 
 using namespace std;
 
@@ -11,34 +12,26 @@ void mainMenu();
 bool getMainAction(string action);
 
 void tasksListMenu();
-bool getTasksListAction();
+bool getTasksListAction(char action);
 
 void addTaskMenu();
 bool getAddTaskAction();
 
 bool isDigit(string input);
 
-bool isDigit(string input)
-{
-    for (int i = 0; i < input.size(); i++)
-    {
+bool isDigit(string input) {
+    for (int i = 0; i < input.size(); i++) {
         if (!isdigit(input[i]))
             return false;
     }
     return true;
 }
 
-void mainMenu()
-{
+void mainMenu() {
     string action;
     bool valid = false;
 
-    string test = "44";
-    int ee = stoi(test);
-    cout << ee << endl;
-
-    do
-    {
+    do {
         system("cls");
         cout << "<------------ Bienvenue dans SUPINFO Auto Clicker ------------>\n\n";
         cout << "Voir la liste des taches [V]\n";
@@ -51,70 +44,61 @@ void mainMenu()
     } while (!valid);
 }
 
-bool getMainAction(string action)
-{
+bool getMainAction(string action) {
 
-    if (action == "V" || action == "v")
-    {
+    if (action == "V" || action == "v") {
         tasksListMenu();
         return true;
     }
-    else if (action == "A" || action == "a")
-    {
+    else if (action == "A" || action == "a") {
         addTaskMenu();
         return true;
     }
-    else if (action == "M" || action == "m")
-    {
+    else if (action == "M" || action == "m") {
         return true;
     }
-    else if (action == "L" || action == "l")
-    {
+    else if (action == "L" || action == "l") {
         return true;
     }
-    else if (action == "Q" || action == "q")
-    {
+    else if (action == "Q" || action == "q") {
         exit(0);
     }
-    else
-    {
+    else {
         return true;
     }
 }
 
-void tasksListMenu()
-{
+void tasksListMenu() {
     char action;
     bool valid = false;
-    do
-    {
+    do {
         system("cls");
         cout << "<------------ Voici la liste des taches ------------>\n\n";
         SUPINFOAutoClicker.displayTasks();
-        cout << "Retour au menu principal [R]\n";
+        cout << "\nRetour au menu principal [R]\n";
         cout << "Quitter [Q]\n\n";
         cin >> action;
-        // valid = getTasksListAction();
+        valid = getTasksListAction(action);
     } while (!valid);
 }
 
-bool getTasksListAction(char action)
-{
+bool getTasksListAction(char action) {
     system("cls");
-    switch (action)
-    {
+    switch (action) {
     case 'r':
     case 'R':
         mainMenu();
         return true;
         break;
+    case 'q':
+    case 'Q':
+        exit(0);
     default:
         return false;
     }
 }
 
-void addTaskMenu()
-{
+void addTaskMenu() {
     char action;
     bool valid = false;
 
@@ -125,24 +109,26 @@ void addTaskMenu()
     string pos[2];
 
     system("cls");
-    cout << "<------------ Création d'une tache ------------>\n\n";
+    cout << "<------------ Creation d'une tache ------------>\n\n";
     cout << "Retour au menu principal [R]\n";
     cout << "Quitter [Q]\n\n";
-    cout << "Quel est le nom de la tâche ?\n";
-    cin >> taskName;
+    cout << "Quel est le nom de la tache ?\n";
+    do {
+        valid = false;
+        getline(cin, taskName);
+        if (taskName != "") valid = true;
+    } while (!valid);
 
     // ------------------ Instructions pour un clique ------------------ //
-    system("cls");
+    // system("cls");
     cout << "Quel est le nombre de cliques que tu veux?\n";
-    do
-    {
+    do {
         cin >> numberClicks;
         valid = isDigit(numberClicks);
     } while (!valid);
 
-    cout << "Quel est la durée de ton clique?\n";
-    do
-    {
+    cout << "Quel est la duree de ton clique?\n";
+    do {
         valid = false;
         cin >> duration;
         valid = isDigit(duration);
@@ -155,9 +141,8 @@ void addTaskMenu()
     //     cin >> delay;
     //     valid = isDigit(delay);
     // } while (!valid);
-    cout << "Quel est la position de ton clique? (en coordonnées x et y ( de gauche à droite de haut en bas ))\n";
-    do
-    {
+    cout << "Quel est la position de ton clique? (entre d'abord le x puis le y)\n";
+    do {
         valid = false;
         cin >> pos[0];
         cin >> pos[1];
@@ -174,26 +159,21 @@ void addTaskMenu()
     mainMenu();
 }
 
-bool getAddTaskAction(string name)
-{
+bool getAddTaskAction(string name) {
     system("cls");
-    if (name == "R" || name == "r")
-    {
+    if (name == "R" || name == "r") {
         mainMenu();
         return true;
     }
-    else if (name == "Q" || name == "q")
-    {
+    else if (name == "Q" || name == "q") {
         exit(0);
     }
-    else
-    {
+    else {
         return true;
     }
 }
 
-int main()
-{
+int main() {
     mainMenu();
     return 0;
 }
