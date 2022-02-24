@@ -15,6 +15,7 @@ class Task {
 
     public:
         Task(std::string name, int cycleRepetitions, int timeInterval = 0, time_t delayedExecution = 0);
+        Task();
         ~Task() = default;
         std::string getName();
         void setName(std::string name);

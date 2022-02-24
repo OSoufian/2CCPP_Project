@@ -2,18 +2,25 @@
 #include "Task.hpp"
 #include <vector>
 
-Task::Task(std::string name, int cycleRepetitions, int timeInterval, time_t delayedExecution) {
+Task::Task(std::string name, int cycleRepetitions, int timeInterval, time_t delayedExecution)
+{
     this->_name = name;
     this->_cycleRepetitions = cycleRepetitions;
     this->_timeInterval = timeInterval;
     this->_delayedExecution = delayedExecution;
 }
 
-std::string Task::getName() {
+Task::Task()
+{
+}
+
+std::string Task::getName()
+{
     return this->_name;
 }
 
-void Task::setName(std::string name) {
+void Task::setName(std::string name)
+{
     this->_name = name;
 }
 
@@ -21,27 +28,31 @@ void Task::setName(std::string name) {
 //     return this->_cycle;
 // }
 
-void Task::setClick(Click click) {
+void Task::setClick(Click click)
+{
     this->_clicks.push_back(click);
 }
 
-std::vector<Click> Task::getClicks() {
+std::vector<Click> Task::getClicks()
+{
     return this->_clicks;
 }
 
-int Task::getCycleRepetitions() {
+int Task::getCycleRepetitions()
+{
     return this->_cycleRepetitions;
 }
 
-int Task::getTimeInterval() {
+int Task::getTimeInterval()
+{
     return this->_timeInterval;
 }
 
-
-
-void Task::display() {
+void Task::display()
+{
     std::cout << "Voici le path de notre tâche : " << std::endl;
 }
 
-void Task::run() {
+void Task::run()
+{
 }

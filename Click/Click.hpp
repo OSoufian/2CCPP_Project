@@ -16,7 +16,7 @@ class Click {
         bool _isHeld;
 
     public:
-        Click(int duration, int x, int y, bool isHeld);
+        Click(int x, int y, bool isHeld = false, int duration = 0);
         ~Click() = default;
         int getX();
         int getY();
