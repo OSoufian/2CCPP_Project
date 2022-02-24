@@ -15,6 +15,8 @@ public:
     Clicker();
     ~Clicker() = default;
     void displayTasks();
+    std::vector<Task> getTasks();
+    Task getTask(int taskIndex);
     void setTask(Task task);
 };
 

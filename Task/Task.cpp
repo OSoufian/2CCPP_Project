@@ -2,9 +2,8 @@
 #include "Task.hpp"
 #include <vector>
 
-Task::Task(std::string name, Cycle cycle, int cycleRepetitions, int timeInterval, time_t delayedExecution) {
+Task::Task(std::string name, int cycleRepetitions, int timeInterval, time_t delayedExecution) {
     this->_name = name;
-    this->_cycle = cycle;
     this->_cycleRepetitions = cycleRepetitions;
     this->_timeInterval = timeInterval;
     this->_delayedExecution = delayedExecution;
@@ -18,8 +17,16 @@ void Task::setName(std::string name) {
     this->_name = name;
 }
 
-Cycle Task::getCycle() {
-    return this->_cycle;
+// Cycle Task::getCycle() {
+//     return this->_cycle;
+// }
+
+void Task::setClick(Click click) {
+    this->_clicks.push_back(click);
+}
+
+std::vector<Click> Task::getClicks() {
+    return this->_clicks;
 }
 
 int Task::getCycleRepetitions() {

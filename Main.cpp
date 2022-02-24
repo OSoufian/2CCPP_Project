@@ -17,7 +17,7 @@ bool getTasksListAction(char action);
 void addTaskMenu();
 bool getAddTaskAction();
 
-bool isDigit(string input);
+void renameTaskMenu();
 
 bool isDigit(string input) {
     for (int i = 0; i < input.size(); i++) {
@@ -26,6 +26,10 @@ bool isDigit(string input) {
     }
     return true;
 }
+
+
+
+// MENU PRINCIPAL
 
 void mainMenu() {
     string action;
@@ -36,7 +40,9 @@ void mainMenu() {
         cout << "<------------ Bienvenue dans SUPINFO Auto Clicker ------------>\n\n";
         cout << "Voir la liste des taches [V]\n";
         cout << "Ajouter une tache [A]\n";
-        cout << "Modifier une tache [M]\n";
+        cout << "Renommer une tache [R]\n";
+        cout << "Dupliquer une tache [D]\n";
+        cout << "Supprimer une tache [S]\n";
         cout << "Lancer une tache [L]\n";
         cout << "Quitter [Q]\n";
         cin >> action;
@@ -54,7 +60,8 @@ bool getMainAction(string action) {
         addTaskMenu();
         return true;
     }
-    else if (action == "M" || action == "m") {
+    else if (action == "R" || action == "r") {
+        renameTaskMenu();
         return true;
     }
     else if (action == "L" || action == "l") {
@@ -67,6 +74,18 @@ bool getMainAction(string action) {
         return true;
     }
 }
+
+
+
+
+
+
+
+
+
+
+
+// LISTE DES TACHES
 
 void tasksListMenu() {
     char action;
@@ -98,8 +117,16 @@ bool getTasksListAction(char action) {
     }
 }
 
+
+
+
+
+
+
+// AJOUTER UNE TACHE
+
 void addTaskMenu() {
-    char action;
+    // char action;
     bool valid = false;
 
     string taskName;
@@ -171,28 +198,73 @@ void addTaskMenu() {
         valid = (isDigit(pos[0]) && isDigit(pos[1]));
     } while (!valid);
 
-    Click click(2, stoi(pos[0]), stoi(pos[1]), isClickHeld);
-    Cycle cycle;
-    cycle.setClick(click);
-    Task task(taskName, cycle, stoi(cycleRepetitions), stoi(timeInterval));
+    Click click(2, stoi(pos[0]), stoi(pos[1]), isClickHeld);    
+    Task task(taskName, stoi(cycleRepetitions), stoi(timeInterval));
+    task.setClick(click);
     SUPINFOAutoClicker.setTask(task);
 
     mainMenu();
 }
 
-bool getAddTaskAction(string name) {
-    system("cls");
-    if (name == "R" || name == "r") {
-        mainMenu();
-        return true;
-    }
-    else if (name == "Q" || name == "q") {
-        exit(0);
-    }
-    else {
-        return true;
-    }
+// bool getAddTaskAction(string name) {
+//     system("cls");
+//     if (name == "R" || name == "r") {
+//         mainMenu();
+//         return true;
+//     }
+//     else if (name == "Q" || name == "q") {
+//         exit(0);
+//     }
+//     else {
+//         return true;
+//     }
+// }
+
+
+
+
+
+
+// RENOMMER UNE TACHE
+
+
+bool validTaskIndex(int taskIndex) {
+    if (taskIndex < 1 || taskIndex > SUPINFOAutoClicker.getTasks().size()) return false;
+    return true;
 }
+
+void renameTaskMenu() {
+    char action;
+    bool valid = false;
+
+    string taskIndex;
+    string newTaskName;
+
+    system("cls");
+    cout << "<------------ Renommer une tache ------------>\n\n";
+    cout << "Retour au menu principal [R]\n";
+    cout << "Quitter [Q]\n\n";
+    cout << "Quel est le numéro de la tache ?\n";
+    do {
+        cin >> taskIndex;
+        if (isDigit(taskIndex) && validTaskIndex(stoi(taskIndex))) valid = true;
+    } while (!valid);
+
+    cout <<"Quel est le nouveau nom pour cette tache ? \n";
+    do {
+        valid = false;
+        getline(cin, newTaskName);
+        if (newTaskName != "") valid = true;
+    } while (!valid);
+
+    SUPINFOAutoClicker.getTask(stoi(taskIndex)).setName(newTaskName);
+
+    mainMenu();
+}
+
+
+
+
 
 int main() {
     mainMenu();
