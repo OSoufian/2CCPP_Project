@@ -18,9 +18,7 @@ class Click {
         int getY();
         bool getIsHeld();
         int getDuration();
-        DWORD getType();
-        
-                
+        DWORD getType();                
 };
 
-#endif // CYCLE_HPP
+#endif // CLICK_HPP

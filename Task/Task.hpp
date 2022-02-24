@@ -1,7 +1,6 @@
 #ifndef TASK_HPP
 #define TASK_HPP
 
-// #include "../Cycle/Cycle.hpp"
 #include "../Click/Click.hpp"
 
 class Task {

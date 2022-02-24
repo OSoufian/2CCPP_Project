@@ -15,12 +15,25 @@ public:
     Clicker();
     ~Clicker() = default;
     void displayTasks();
-    std::vector<Task> getTasks();
-    Task getTask(int taskIndex);
-    void setTask(Task task);
-    void deleteTask(int taskIndex);
-    void runTask(int taskIndex);
-    void setTaskName(int taskIndex, std::string newTaskName);
+
+    bool isDigit(std::string input);
+
+    void mainMenu();
+    bool getMainAction(std::string action);
+
+    void tasksListMenu();
+    bool getTasksListAction(char action);
+
+    void addTaskMenu();
+
+    bool validTaskIndex(int taskIndex);
+    void renameTaskMenu();
+
+    void deleteTaskMenu();
+
+    void duplicateTaskMenu();
+
+    void runTaskMenu();
 };
 
 #endif // CLICKER_HPP
