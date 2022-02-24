@@ -1,4 +1,5 @@
 #include <iostream>
+#include <windows.h>
 #include "Task.hpp"
 #include <vector>
 
@@ -67,6 +68,37 @@ void Task::setTimeInterval(int timeInterval)
     this->_timeInterval = timeInterval;
 }
 
-void Task::run()
-{
+void Task::run() {
+
+    bool click = false;
+	int cycles = this->_cycleRepetitions;
+    std::cout << "Press 'P' to enable and 'S' to disable autoclicker\n";
+	while (cycles != 0 || this->_isInfiniteCycle) {
+		if (GetAsyncKeyState('P')) {
+			click = true; 
+		}
+		else if (GetAsyncKeyState('S')) {
+			click = false;
+		}
+		if (click == true) {
+			int x;
+			int y;
+			
+			for (int i = 0; i < this->_clicks.size(); i++) {
+				x = this->_clicks[i].getX();
+				y = this->_clicks[i].getY();
+
+			
+				SetCursorPos(x, y);
+				mouse_event(this->_clicks[i].getType(), x, y, 0, 0);
+				if (this->_clicks[i].getIsHeld()){
+					Sleep(this->_clicks[i].getDuration() * 1000);
+				}
+				mouse_event(MOUSEEVENTF_LEFTUP, x, y, 0, 0);
+				Sleep(1000/this->_timeInterval);
+			}
+			
+		}
+		cycles--;
+	}
 }

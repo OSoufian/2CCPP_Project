@@ -7,17 +7,22 @@ void menu()
 	cout << "Press 'X' to enable and 'Z' to disable autoclicker\n";
 }
  
-void clicker() {
+void clicker()
+{
 	bool click = false;
  
-	while (true) {
-		if (GetAsyncKeyState('X')) {
+	while (true)
+	{
+		if (GetAsyncKeyState('X'))
+		{
 			click = true; 
 		}
-		else if (GetAsyncKeyState('Z')) {
+		else if (GetAsyncKeyState('Z'))
+		{
 			click = false;
 		}
-		if (click == true) {
+		if (click == true)
+		{
 			SetCursorPos(0, 0);
 			mouse_event(MOUSEEVENTF_LEFTDOWN, 0, 0, 0, 0);
 			if (GetAsyncKeyState(VK_LBUTTON)){
@@ -29,7 +34,8 @@ void clicker() {
 	}
 }		
  
-int main() {
+int main()
+{
 	menu();
 	clicker();
  

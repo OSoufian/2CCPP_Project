@@ -19,6 +19,7 @@ public:
     Task getTask(int taskIndex);
     void setTask(Task task);
     void deleteTask(int taskIndex);
+    void runTask(int taskIndex);
     void setTaskName(int taskIndex, std::string newTaskName);
 };
 
