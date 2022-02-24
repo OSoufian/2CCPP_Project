@@ -138,10 +138,12 @@ void addTaskMenu()
     int steps;
 
     string taskName;
-    string clickDuration;
+    string clickDuration = "0";
     string numberClicks;
     string clickHeld;
     bool isClickHeld;
+    string infiniteCycle;
+    bool isInfiniteCycle;
     string cycleRepetitions = "0";
     string timeInterval;
     string pos[2];
@@ -160,7 +162,7 @@ void addTaskMenu()
 
     // ------------------ Instructions pour un clique ------------------ //
     system("cls");
-    cout << "Quel est le nombre de cliques que tu veux?\n";
+    cout << "Quel est le nombre de cliques que vous voulez?\n";
     do
     {
         valid = false;
@@ -168,6 +170,7 @@ void addTaskMenu()
         steps = stoi(numberClicks);
         valid = isDigit(numberClicks);
     } while (!valid);
+    Task task(taskName);
     do
     {
         cout << "Voulez vous maintenir votre click ? ([o]oui/[N]non)\n";
@@ -175,7 +178,7 @@ void addTaskMenu()
         {
             valid = false;
             cin >> clickHeld;
-            if (clickHeld == "o" || clickHeld == "n" || clickHeld == "N")
+            if (clickHeld == "oui" || clickHeld == "o" || clickHeld == "O" || clickHeld == "non" || clickHeld == "n" || clickHeld == "N")
             {
                 if (clickHeld == "oui" || clickHeld == "o")
                     isClickHeld = true;
@@ -187,7 +190,7 @@ void addTaskMenu()
 
         if (isClickHeld)
         {
-            cout << "Quel est la duree de ton clique (en secondes) ?\n";
+            cout << "Quel est la duree de votre clique (en secondes) ?\n";
             do
             {
                 valid = false;
@@ -196,7 +199,7 @@ void addTaskMenu()
             } while (!valid);
         }
 
-        cout << "Quel est la position de ton clique ? (entre d'abord le x puis le y)\n";
+        cout << "Quel est la position de votre clique ? (entrez d'abord le x puis le y)\n";
         do
         {
             valid = false;
@@ -205,28 +208,43 @@ void addTaskMenu()
             valid = (isDigit(pos[0]) && isDigit(pos[1]));
         } while (!valid);
 
-        cout << "Quel est le nombre de repetitions de ton cycle ?\n";
-        do
-        {
-            valid = false;
-            cin >> cycleRepetitions;
-            valid = isDigit(cycleRepetitions);
-        } while (!valid);
-
-        cout << "Quel est le nombre de secondes entre 2 cycles ?\n";
-        do
-        {
-            valid = false;
-            cin >> timeInterval;
-            valid = isDigit(timeInterval);
-        } while (!valid);
+        Click click(stoi(pos[0]), stoi(pos[1]), isClickHeld, stoi(clickDuration));
+        task.setClick(click);
 
         steps--;
     } while (steps != 0);
 
-    Click click(stoi(pos[0]), stoi(pos[1]), isClickHeld, stoi(clickDuration));
-    Task task(taskName, stoi(cycleRepetitions), stoi(timeInterval));
-    task.setClick(click);
+    cout << "Voulez vous que le cycle se répète indéfiniment? (oui/non)\n";
+    do
+    {
+        valid = false;
+        cin >> infiniteCycle;
+        if (infiniteCycle == "oui" || infiniteCycle == "o" || infiniteCycle == "non" || infiniteCycle == "n" || infiniteCycle == "N")
+        {
+            if (infiniteCycle == "oui" || infiniteCycle == "o") {
+                isInfiniteCycle = true;
+                task.setIsInfiniteCycle(isInfiniteCycle);
+                valid = true;
+            }
+            else {
+                isInfiniteCycle = false;
+                task.setIsInfiniteCycle(isInfiniteCycle);
+                cout << "Combien de fois le cycle dois se répéter?\n";
+                cin >> cycleRepetitions;
+                valid = isDigit(cycleRepetitions);
+            }
+        }
+    } while (!valid);
+    cout << "Quel est le nombre de secondes entre 2 cycles ?\n";
+    do
+    {
+        valid = false;
+        cin >> timeInterval;
+        valid = isDigit(timeInterval);
+    } while (!valid);
+
+    task.setCycleRepetitions(stoi(cycleRepetitions));
+    task.setTimeInterval(stoi(timeInterval));
     SUPINFOAutoClicker.setTask(task);
 
     mainMenu();

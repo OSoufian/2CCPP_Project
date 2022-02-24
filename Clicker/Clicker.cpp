@@ -33,12 +33,16 @@ void Clicker::displayTasks()
     for (int i = 0; i < this->_tasks.size(); i++)
     {
         std::cout << this->_tasks[i].getName() << ":" << std::endl;
-        std::cout << "Position du clique : (" << this->_tasks[i].getClicks()[0].getX() << ", " << this->_tasks[i].getClicks()[0].getY() << ")" << std::endl;
-        std::cout << "Nombres de repetions: ";
-        if (!this->_tasks[i].getClicks()[0].getIsHeld())
-            std::cout << "en boucle\n";
-        else
+        for (int j = 0; j < this->_tasks[i].getClicks().size(); j++){
+            std::cout << "Position du clique " << (j+1) << ": (" << this->_tasks[i].getClicks()[j].getX() << ", " << this->_tasks[i].getClicks()[j].getY() << ")" << std::endl;
+            if (this->_tasks[i].getClicks()[j].getIsHeld())
+                std::cout << "Le temps de maintien du clique est de : " << this->_tasks[i].getClicks()[j].getDuration() << std::endl;
+        }
+        std::cout << "Nombres de repetions du cycle : ";
+        if (this->_tasks[i].getIsInfiniteCycle())
+            std::cout << "En boucle !" << std::endl;
+        else 
             std::cout << this->_tasks[i].getCycleRepetitions() << std::endl;
-        std::cout << "Temps d'intervalle: " << this->_tasks[i].getTimeInterval() << " secondes\n\n";
+        std::cout << "Temps d'intervalle entre 2 cycles: " << this->_tasks[i].getTimeInterval() << " secondes\n\n";
     }
 }

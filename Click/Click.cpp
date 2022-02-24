@@ -1,11 +1,12 @@
 #include <iostream>
 #include "Click.hpp"
 
-Click::Click(int duration, int x, int y, bool isHeld) {
-    this->_duration = duration;
+Click::Click(int x, int y, bool isHeld,  int duration) {
     this->_position[0] = x;
     this->_position[1] = y;
     this->_isHeld = isHeld;
+    this->_duration = duration;
+    
 }
 
 int Click::getX(){
@@ -18,4 +19,8 @@ int Click::getY(){
 
 bool Click::getIsHeld() {
     return this->_isHeld;    
+}
+
+int Click::getDuration() {
+    return this->_duration;
 }

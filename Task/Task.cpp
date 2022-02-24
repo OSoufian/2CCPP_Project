@@ -2,10 +2,11 @@
 #include "Task.hpp"
 #include <vector>
 
-Task::Task(std::string name, int cycleRepetitions, int timeInterval, time_t delayedExecution)
+Task::Task(std::string name, int cycleRepetitions, bool isInfiniteCycle, int timeInterval, time_t delayedExecution)
 {
     this->_name = name;
     this->_cycleRepetitions = cycleRepetitions;
+    this->_isInfiniteCycle = isInfiniteCycle;
     this->_timeInterval = timeInterval;
     this->_delayedExecution = delayedExecution;
 }
@@ -43,14 +44,27 @@ int Task::getCycleRepetitions()
     return this->_cycleRepetitions;
 }
 
+bool Task::getIsInfiniteCycle() {
+    return this->_isInfiniteCycle;    
+}
+
+void Task::setIsInfiniteCycle(bool isInfiniteCycle) {
+    this->_isInfiniteCycle = isInfiniteCycle;
+}
+
 int Task::getTimeInterval()
 {
     return this->_timeInterval;
 }
 
-void Task::display()
+void Task::setCycleRepetitions(int cycleRepetitions)
 {
-    std::cout << "Voici le path de notre tâche : " << std::endl;
+    this->_cycleRepetitions = cycleRepetitions;
+}
+
+void Task::setTimeInterval(int timeInterval)
+{
+    this->_timeInterval = timeInterval;
 }
 
 void Task::run()

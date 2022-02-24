@@ -7,23 +7,26 @@
 class Task {
     private:
         std::string _name;
-        // Cycle _cycle;
         std::vector<Click> _clicks;
         int _cycleRepetitions;
+        bool _isInfiniteCycle;
         int _timeInterval;
         time_t _delayedExecution;
 
     public:
-        Task(std::string name, int cycleRepetitions, int timeInterval = 0, time_t delayedExecution = 0);
+        Task(std::string name, int cycleRepetitions = 1, bool isInfiniteCycle = false, int timeInterval = 0, time_t delayedExecution = 0);
         Task();
         ~Task() = default;
         std::string getName();
         void setName(std::string name);
-        // Cycle getCycle();
         std::vector<Click> getClicks();
         void setClick(Click click);
         int getCycleRepetitions();
+        bool getIsInfiniteCycle();
+        void setIsInfiniteCycle(bool isInfiniteCycle);
         int getTimeInterval();
+        void setCycleRepetitions(int cycleRepetitions);
+        void setTimeInterval(int timeInterval);
         void display();
         void run();
 };

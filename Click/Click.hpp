@@ -21,6 +21,8 @@ class Click {
         int getX();
         int getY();
         bool getIsHeld();
+        int getDuration();
+        
                 
 };
 
