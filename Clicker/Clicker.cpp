@@ -4,6 +4,12 @@
 using namespace std;
 
 Clicker::Clicker() {
+    Task task("Tache 1");
+    Click click(0, 0, MOUSEEVENTF_LEFTDOWN, false, 0);
+    task.setClick(click);
+    task.setIsInfiniteCycle(true);
+    task.setTimeInterval(1);
+    this->_tasks.push_back(task);
     mainMenu();
 }
 

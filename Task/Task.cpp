@@ -3,102 +3,105 @@
 #include "Task.hpp"
 #include <vector>
 
-Task::Task(std::string name, int cycleRepetitions, bool isInfiniteCycle, int timeInterval, time_t delayedExecution)
-{
-    this->_name = name;
-    this->_cycleRepetitions = cycleRepetitions;
-    this->_isInfiniteCycle = isInfiniteCycle;
-    this->_timeInterval = timeInterval;
-    this->_delayedExecution = delayedExecution;
+Task::Task(std::string name, int cycleRepetitions, bool isInfiniteCycle, int timeInterval, time_t delayedExecution) {
+	this->_name = name;
+	this->_cycleRepetitions = cycleRepetitions;
+	this->_isInfiniteCycle = isInfiniteCycle;
+	this->_timeInterval = timeInterval;
+	this->_delayedExecution = delayedExecution;
 }
 
-Task::Task()
-{
+Task::Task() {
 }
 
-std::string Task::getName()
-{
-    return this->_name;
+std::string Task::getName() {
+	return this->_name;
 }
 
-void Task::setName(std::string name)
-{
-    this->_name = name;
+void Task::setName(std::string name) {
+	this->_name = name;
 }
 
-void Task::setClick(Click click)
-{
-    this->_clicks.push_back(click);
+void Task::setClick(Click click) {
+	this->_clicks.push_back(click);
 }
 
-std::vector<Click> Task::getClicks()
-{
-    return this->_clicks;
+std::vector<Click> Task::getClicks() {
+	return this->_clicks;
 }
 
-int Task::getCycleRepetitions()
-{
-    return this->_cycleRepetitions;
+int Task::getCycleRepetitions() {
+	return this->_cycleRepetitions;
 }
 
 bool Task::getIsInfiniteCycle() {
-    return this->_isInfiniteCycle;    
+	return this->_isInfiniteCycle;
 }
 
 void Task::setIsInfiniteCycle(bool isInfiniteCycle) {
-    this->_isInfiniteCycle = isInfiniteCycle;
+	this->_isInfiniteCycle = isInfiniteCycle;
 }
 
-int Task::getTimeInterval()
-{
-    return this->_timeInterval;
+int Task::getTimeInterval() {
+	return this->_timeInterval;
 }
 
-void Task::setCycleRepetitions(int cycleRepetitions)
-{
-    this->_cycleRepetitions = cycleRepetitions;
+void Task::setCycleRepetitions(int cycleRepetitions) {
+	this->_cycleRepetitions = cycleRepetitions;
 }
 
-void Task::setTimeInterval(int timeInterval)
-{
-    this->_timeInterval = timeInterval;
+void Task::setTimeInterval(int timeInterval) {
+	this->_timeInterval = timeInterval;
 }
 
 void Task::run() {
 
-	bool run =false;
+	bool click = false;
+	int cycles = this->_cycleRepetitions;
+	std::string a;
+	bool isInfiniteCycle = this->_isInfiniteCycle;
 
-	do {
-		bool click = false;
-		int cycles = this->_cycleRepetitions;
-		std::cout << "Press 'P' to enable and 'S' to disable autoclicker\n";
-		while (cycles != 0 || this->_isInfiniteCycle) {
-			if (GetAsyncKeyState('P')) {
-				click = true; 
-			}
-			else if (GetAsyncKeyState('S')) {
-				click = false;
-			}
-			if (click == true) {
-				int x;
-				int y;
-				
-				for (int i = 0; i < this->_clicks.size(); i++) {
-					x = this->_clicks[i].getX();
-					y = this->_clicks[i].getY();
+	std::cout << "Press 'P' to enable and 'S' to disable autoclicker\n";
 
-				
-					SetCursorPos(x, y);
-					mouse_event(this->_clicks[i].getType(), x, y, 0, 0);
-					if (this->_clicks[i].getIsHeld()){
-						Sleep(this->_clicks[i].getDuration() * 1000);
+	while (cycles != 0 || isInfiniteCycle) {
+		if (GetAsyncKeyState('P')) {
+			click = true;
+		}
+		else if (GetAsyncKeyState('S')) {
+			click = false;
+			if (isInfiniteCycle) {
+				system("cls");
+				std::cout << "Voulez vous arrêter la tâche? ([O]oui/[n]non)\n";
+				bool valid = false;
+				do {
+					std::cin >> a;
+					if (a == "oui" || a == "o" || a == "O" || a == "non" || a == "n" || a == "N") {
+						if (a == "oui" || a == "o" || a == "O") {
+							isInfiniteCycle = false;
+							return;
+						}
+						valid = true;
 					}
-					mouse_event(MOUSEEVENTF_LEFTUP, x, y, 0, 0);
-					Sleep(1000/this->_timeInterval);
+				} while (!valid);
+			}
+		}
+		if (click == true) {
+			int x;
+			int y;
+
+			for (int i = 0; i < this->_clicks.size(); i++) {
+				x = this->_clicks[i].getX();
+				y = this->_clicks[i].getY();
+
+				SetCursorPos(x, y);
+				mouse_event(this->_clicks[i].getType(), x, y, 0, 0);
+				if (this->_clicks[i].getIsHeld()) {
+					Sleep(this->_clicks[i].getDuration() * 1000);
 				}
-				
+				mouse_event(MOUSEEVENTF_LEFTUP, x, y, 0, 0);
+				Sleep(1000 / this->_timeInterval);
 			}
 			cycles--;
 		}
-	} while (run);
+	}
 }
