@@ -1,43 +1,21 @@
 #include <iostream>
 #include "Clicker.hpp"
+#include "../Date/Date.hpp"
+#include <chrono>
+#include <ctime>
 
 using namespace std;
 
 Clicker::Clicker() {
-    Task task("Tache 1");
-    Click click(0, 0, MOUSEEVENTF_LEFTDOWN, false, 0);
-    task.setClick(click);
-    task.setIsInfiniteCycle(true);
-    task.setTimeInterval(1);
-    this->_tasks.push_back(task);
+    // Task task("Tache 1");
+    // Click click(0, 0, MOUSEEVENTF_LEFTDOWN, false, 0);
+    // task.setClick(click);
+    // task.setIsInfiniteCycle(true);
+    // task.setTimeInterval(1);
+    // this->_tasks.push_back(task);
     mainMenu();
 }
 
-void Clicker::displayTasks() {
-    for (int i = 0; i < this->_tasks.size(); i++)
-    {
-        cout << this->_tasks[i].getName() << ":" << endl;
-        for (int j = 0; j < this->_tasks[i].getClicks().size(); j++){
-            cout << "Position du clique " << (j+1) << ": (" << this->_tasks[i].getClicks()[j].getX() << ", " << this->_tasks[i].getClicks()[j].getY() << ")" << endl;
-            if (this->_tasks[i].getClicks()[j].getIsHeld())
-                cout << "Le temps de maintien du clique est de : " << this->_tasks[i].getClicks()[j].getDuration() << endl;
-        }
-        cout << "Nombres de repetions du cycle : ";
-        if (this->_tasks[i].getIsInfiniteCycle())
-            cout << "En boucle !" << endl;
-        else 
-            cout << this->_tasks[i].getCycleRepetitions() << endl;
-        cout << "Temps d'intervalle entre 2 cycles: " << this->_tasks[i].getTimeInterval() << " secondes\n\n";
-    }
-}
-
-bool Clicker::isDigit(string input) {
-    for (int i = 0; i < input.size(); i++) {
-        if (!isdigit(input[i]))
-            return false;
-    }
-    return true;
-}
 
 // MENU PRINCIPAL
 
@@ -54,6 +32,7 @@ void Clicker::mainMenu() {
         cout << "Dupliquer une tache [D]\n";
         cout << "Supprimer une tache [S]\n";
         cout << "Lancer une tache [L]\n";
+        cout << "Consulter l'historique des taches [H]\n";
         cout << "Quitter [Q]\n";
         cin >> action;
         valid = getMainAction(action);
@@ -86,6 +65,10 @@ bool Clicker::getMainAction(string action) {
         runTaskMenu();
         return true;
     }
+    else if (action == "H" || action == "h") {
+        historyMenu();
+        return true;
+    }
     else if (action == "Q" || action == "q") {
         exit(0);
     }
@@ -94,22 +77,50 @@ bool Clicker::getMainAction(string action) {
     }
 }
 
+
 // LISTE DES TACHES
+
 void Clicker::tasksListMenu() {
     char action;
     bool valid = false;
     do {
         system("cls");
         cout << "<------------ Voici la liste des taches ------------>\n\n";
-        this->displayTasks();
+        displayTasks();
         cout << "\nRetour au menu principal [R]\n";
         cout << "Quitter [Q]\n\n";
         cin >> action;
-        valid = getTasksListAction(action);
+        valid = getActionWithoutInput(action);
     } while (!valid);
 }
 
-bool Clicker::getTasksListAction(char action) {
+void Clicker::displayTasks() {
+    for (int i = 0; i < this->_tasks.size(); i++) {
+        cout << this->_tasks[i].getName() << ":" << endl;
+        for (int j = 0; j < this->_tasks[i].getClicks().size(); j++){
+            cout << "Position du clique " << (j+1) << ": (" << this->_tasks[i].getClicks()[j].getX() << ", " << this->_tasks[i].getClicks()[j].getY() << ")" << endl;
+            if (this->_tasks[i].getClicks()[j].getIsHeld())
+                cout << "Le temps de maintien du clique est de : " << this->_tasks[i].getClicks()[j].getDuration() << endl;
+        }
+
+        cout << "Nombres de repetions du cycle : ";
+        if (this->_tasks[i].getIsInfiniteCycle())
+            cout << "En boucle !" << endl;
+        else 
+            cout << this->_tasks[i].getCycleRepetitions() << endl;
+        cout << "Temps d'intervalle entre 2 cycles: " << this->_tasks[i].getTimeInterval() << " secondes\n";
+
+        cout << "Heure d'execution : ";
+        if (this->_tasks[i].getIsScheduled()) {
+            cout << this->_tasks[i].getHourTime() << ":"
+                 << this->_tasks[i].getMinutesTime() << ":"
+                 << this->_tasks[i].getSecondsTime() << endl;
+        }
+        else cout << "lancement manuel\n";
+    }
+}
+
+bool Clicker::getActionWithoutInput(char action) {
     system("cls");
     switch (action) {
     case 'r':
@@ -144,6 +155,13 @@ void Clicker::addTaskMenu() {
     string pos[2];
     DWORD clickType;
 
+    bool isScheduled;
+    string scheduled;
+    string hour;
+    string minutes;
+    string seconds;
+
+
     system("cls");
     cout << "<------------ Creation d'une tache ------------>\n\n";
     cout << "Retour au menu principal [R]\n";
@@ -167,7 +185,7 @@ void Clicker::addTaskMenu() {
     Task task(taskName);
     do {
 
-        cout << "Quel est le type de votre clique ? ([d]droit/[g]gauche)\n";
+        cout << "Quel est le type de votre clique ? ([g]gauche/[d]droit)\n";
         do {
             valid = false;
             cin >> clickHeld;
@@ -210,12 +228,12 @@ void Clicker::addTaskMenu() {
         } while (!valid);
 
         Click click(stoi(pos[0]), stoi(pos[1]), clickType, isClickHeld, stoi(clickDuration));
-        task.setClick(click);
+        task.addClick(click);
 
         steps--;
     } while (steps != 0);
 
-    cout << "Voulez vous que le cycle se répète indéfiniment? (oui/non)\n";
+    cout << "Voulez vous que le cycle se repete indefiniment? (oui/non)\n";
     do {
         valid = false;
         cin >> infiniteCycle;
@@ -224,8 +242,7 @@ void Clicker::addTaskMenu() {
                 isInfiniteCycle = true;
                 task.setIsInfiniteCycle(isInfiniteCycle);
                 valid = true;
-            }
-            else {
+            } else {
                 isInfiniteCycle = false;
                 task.setIsInfiniteCycle(isInfiniteCycle);
                 cout << "Combien de fois le cycle dois se répéter?\n";
@@ -234,12 +251,53 @@ void Clicker::addTaskMenu() {
             }
         }
     } while (!valid);
-    cout << "Quel est le nombre de cliques par secondes entre 2 cycles ?\n";
+    cout << "Combien de secondes avant de recommencer un cycle ?\n";
     do {
         valid = false;
         cin >> timeInterval;
         valid = isDigit(timeInterval);
     } while (!valid);
+
+    cout << "Voulez vous definir une heure d'execution pour cette tache ? ([o]oui/[n]non)\n";
+    do {
+        valid = false;
+        cin >> scheduled;
+        if (scheduled == "oui" || scheduled == "o" || scheduled == "O" || scheduled == "non" || scheduled == "n" || scheduled == "N") {
+            if (scheduled == "oui" || scheduled == "o") {
+                isScheduled = true;
+                task.setIsScheduled(isScheduled);
+            }
+            else isScheduled = false;
+            valid = true;
+        }
+    } while (!valid);
+
+    if (isScheduled) {
+        cout << "A quelle heure ?\n";
+        do {
+            valid = false;
+            cin >> hour;
+            if (isDigit(hour))
+                if (stoi(hour) >= 1 && stoi(hour) < 24) valid = true;
+        } while (!valid);
+
+        cout << "Minutes ?\n";
+        do {
+            valid = false;
+            cin >> minutes;
+            if (isDigit(minutes))
+                if (stoi(minutes) >= 1 && stoi(minutes) < 60) valid = true;
+        } while (!valid);
+
+        cout << "Secondes ?\n";
+        do {
+            valid = false;
+            cin >> seconds;
+            if (isDigit(seconds))
+                if (stoi(seconds) >= 1 && stoi(seconds) < 60) valid = true;
+        } while (!valid);
+        task.setTimeExecution(Date(stoi(hour), stoi(minutes), stoi(seconds)));
+    }
 
     task.setCycleRepetitions(stoi(cycleRepetitions));
     task.setTimeInterval(stoi(timeInterval));
@@ -248,13 +306,15 @@ void Clicker::addTaskMenu() {
     mainMenu();
 }
 
-// RENOMMER UNE TACHE
-
-bool Clicker::validTaskIndex(int taskIndex) {
-    if (taskIndex < 1 || taskIndex > this->_tasks.size())
-        return false;
+bool Clicker::isDigit(string input) {
+    for (int i = 0; i < input.size(); i++) {
+        if (!isdigit(input[i]))
+            return false;
+    }
     return true;
 }
+
+// RENOMMER UNE TACHE
 
 void Clicker::renameTaskMenu() {
     char action;
@@ -287,6 +347,13 @@ void Clicker::renameTaskMenu() {
     mainMenu();
 }
 
+bool Clicker::validTaskIndex(int taskIndex) {
+    if (taskIndex < 1 || taskIndex > this->_tasks.size())
+        return false;
+    return true;
+}
+
+
 // SUPPRIMER UNE TACHE
 
 void Clicker::deleteTaskMenu() {
@@ -311,6 +378,7 @@ void Clicker::deleteTaskMenu() {
     mainMenu();
 }
 
+
 // LANCER UNE TACHE
 
 void Clicker::runTaskMenu() {
@@ -329,10 +397,17 @@ void Clicker::runTaskMenu() {
             valid = true;
     } while (!valid);
 
+    auto start = std::chrono::system_clock::now();    
     this->_tasks[stoi(taskIndex) - 1].run(); 
+    auto end = std::chrono::system_clock::now();
+    std::time_t start_time = std::chrono::system_clock::to_time_t(start);
+	std::time_t end_time = std::chrono::system_clock::to_time_t(end);
+    History history(this->_tasks[stoi(taskIndex) - 1].getName(), start_time, end-start);
+    this->_history.push_back(history);
 
     mainMenu();
 }
+
 
 // DUPLIQUER UNE TACHE
 
@@ -366,4 +441,31 @@ void Clicker::duplicateTaskMenu() {
     this->_tasks.push_back(newTask);
 
     mainMenu();
+}
+
+
+// HISTORIQUE DES TACHES
+
+void Clicker::historyMenu() {
+    char action;
+    bool valid = false;
+    do {
+        system("cls");
+        cout << "<------------ HISTORIQUE DES TACHES ------------>\n\n";
+        displayHistory();
+        cout << "\nRetour au menu principal [R]\n";
+        cout << "Quitter [Q]\n\n";
+        cin >> action;
+        valid = getActionWithoutInput(action);
+    } while (!valid);    
+}
+
+void Clicker::displayHistory() {
+    for (int i = 0; i < this->_history.size(); i++) {
+        time_t timeExecution =  this->_history[i].getTimeExecution();
+
+        cout << "Nom de la tache : " << this->_history[i].getName() << endl;
+        cout << "Date : " << std::ctime(&timeExecution);
+        cout << "Duree : " << this->_history[i].getDuration().count() << " secondes" << endl;
+    }    
 }

@@ -5,35 +5,36 @@
 
 #include "../Task/Task.hpp"
 #include "../History/History.hpp"
-class Clicker
-{
+class Clicker {
 private:
     std::vector<Task> _tasks;
-    std::vector<History> _histories;
+    std::vector<History> _history;
 
 public:
     Clicker();
     ~Clicker() = default;
-    void displayTasks();
-
-    bool isDigit(std::string input);
 
     void mainMenu();
     bool getMainAction(std::string action);
 
     void tasksListMenu();
-    bool getTasksListAction(char action);
+    void displayTasks();
+    bool getActionWithoutInput(char action);
 
     void addTaskMenu();
+    bool isDigit(std::string input);
 
-    bool validTaskIndex(int taskIndex);
     void renameTaskMenu();
+    bool validTaskIndex(int taskIndex);    
 
     void deleteTaskMenu();
 
-    void duplicateTaskMenu();
-
     void runTaskMenu();
+
+    void duplicateTaskMenu();    
+   
+    void historyMenu();
+    void displayHistory();
 };
 
 #endif // CLICKER_HPP

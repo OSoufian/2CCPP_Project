@@ -3,12 +3,12 @@
 #include "Task.hpp"
 #include <vector>
 
-Task::Task(std::string name, int cycleRepetitions, bool isInfiniteCycle, int timeInterval, time_t delayedExecution) {
+Task::Task(std::string name, int cycleRepetitions, bool isInfiniteCycle, bool isScheduled, int timeInterval) {
 	this->_name = name;
 	this->_cycleRepetitions = cycleRepetitions;
 	this->_isInfiniteCycle = isInfiniteCycle;
+	this->_isScheduled = isScheduled;
 	this->_timeInterval = timeInterval;
-	this->_delayedExecution = delayedExecution;
 }
 
 Task::Task() {
@@ -22,16 +22,20 @@ void Task::setName(std::string name) {
 	this->_name = name;
 }
 
-void Task::setClick(Click click) {
-	this->_clicks.push_back(click);
-}
-
 std::vector<Click> Task::getClicks() {
 	return this->_clicks;
 }
 
+void Task::addClick(Click click) {
+	this->_clicks.push_back(click);
+}
+
 int Task::getCycleRepetitions() {
 	return this->_cycleRepetitions;
+}
+
+void Task::setCycleRepetitions(int cycleRepetitions) {
+	this->_cycleRepetitions = cycleRepetitions;
 }
 
 bool Task::getIsInfiniteCycle() {
@@ -42,23 +46,42 @@ void Task::setIsInfiniteCycle(bool isInfiniteCycle) {
 	this->_isInfiniteCycle = isInfiniteCycle;
 }
 
-int Task::getTimeInterval() {
-	return this->_timeInterval;
+bool Task::getIsScheduled() {
+	return this->_isScheduled;
 }
 
-void Task::setCycleRepetitions(int cycleRepetitions) {
-	this->_cycleRepetitions = cycleRepetitions;
+void Task::setIsScheduled(bool isScheduled) {
+	this->_isScheduled = isScheduled;
+}
+
+int Task::getTimeInterval() {
+	return this->_timeInterval;
 }
 
 void Task::setTimeInterval(int timeInterval) {
 	this->_timeInterval = timeInterval;
 }
 
-void Task::run() {
+int Task::getHourTime() {
+    return this->_timeExecution.getHour();
+}
 
+int Task::getMinutesTime() {
+    return this->_timeExecution.getMinutes();
+}
+
+int Task::getSecondsTime() {
+    return this->_timeExecution.getSeconds();
+}
+
+void Task::setTimeExecution(Date timeExecution) {
+	this->_timeExecution = timeExecution;
+}
+
+void Task::run() {
 	bool click = false;
 	int cycles = this->_cycleRepetitions;
-	std::string a;
+	std::string stopTask;
 	bool isInfiniteCycle = this->_isInfiniteCycle;
 
 	std::cout << "Press 'P' to enable and 'S' to disable autoclicker\n";
@@ -74,9 +97,9 @@ void Task::run() {
 				std::cout << "Voulez vous arrêter la tâche? ([O]oui/[n]non)\n";
 				bool valid = false;
 				do {
-					std::cin >> a;
-					if (a == "oui" || a == "o" || a == "O" || a == "non" || a == "n" || a == "N") {
-						if (a == "oui" || a == "o" || a == "O") {
+					std::cin >> stopTask;
+					if (stopTask == "oui" || stopTask == "o" || stopTask == "O" || stopTask == "non" || stopTask == "n" || stopTask == "N") {
+						if (stopTask == "oui" || stopTask == "o" || stopTask == "O") {
 							isInfiniteCycle = false;
 							return;
 						}
@@ -99,7 +122,7 @@ void Task::run() {
 					Sleep(this->_clicks[i].getDuration() * 1000);
 				}
 				mouse_event(MOUSEEVENTF_LEFTUP, x, y, 0, 0);
-				Sleep(1000 / this->_timeInterval);
+				Sleep(1000 * this->_timeInterval);
 			}
 			cycles--;
 		}

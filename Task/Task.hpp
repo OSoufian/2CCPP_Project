@@ -2,6 +2,7 @@
 #define TASK_HPP
 
 #include "../Click/Click.hpp"
+#include "../Date/Date.hpp"
 
 class Task {
     private:
@@ -9,23 +10,32 @@ class Task {
         std::vector<Click> _clicks;
         int _cycleRepetitions;
         bool _isInfiniteCycle;
+        bool _isScheduled;
         int _timeInterval;
-        time_t _delayedExecution;
+        Date _timeExecution;
 
     public:
-        Task(std::string name, int cycleRepetitions = 1, bool isInfiniteCycle = false, int timeInterval = 0, time_t delayedExecution = 0);
+        Task(std::string name, int cycleRepetitions = 1, bool isInfiniteCycle = false, bool isScheduled = false, int timeInterval = 0);
         Task();
         ~Task() = default;
+        
         std::string getName();
         void setName(std::string name);
         std::vector<Click> getClicks();
-        void setClick(Click click);
+        void addClick(Click click);
         int getCycleRepetitions();
+        void setCycleRepetitions(int cycleRepetitions);
         bool getIsInfiniteCycle();
         void setIsInfiniteCycle(bool isInfiniteCycle);
+        bool getIsScheduled();
+        void setIsScheduled(bool isScheduled);        
         int getTimeInterval();
-        void setCycleRepetitions(int cycleRepetitions);
         void setTimeInterval(int timeInterval);
+        int getHourTime();
+        int getMinutesTime();
+        int getSecondsTime();
+        void setTimeExecution(Date timeExecution);
+        
         void display();
         void run();
 };

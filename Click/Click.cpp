@@ -7,7 +7,6 @@ Click::Click(int x, int y, DWORD type, bool isHeld,  int duration) {
     this->_type = type;
     this->_isHeld = isHeld;
     this->_duration = duration;
-    
 }
 
 int Click::getX(){
