@@ -1,6 +1,6 @@
 #include <iostream>
 #include "Clicker.hpp"
-#include "../Date/Date.hpp"
+#include "../Time/Time.hpp"
 #include <chrono>
 #include <ctime>
 
@@ -296,7 +296,7 @@ void Clicker::addTaskMenu() {
             if (isDigit(seconds))
                 if (stoi(seconds) >= 1 && stoi(seconds) < 60) valid = true;
         } while (!valid);
-        task.setTimeExecution(Date(stoi(hour), stoi(minutes), stoi(seconds)));
+        task.setTimeExecution(Time(stoi(hour), stoi(minutes), stoi(seconds)));
     }
 
     task.setCycleRepetitions(stoi(cycleRepetitions));
@@ -465,7 +465,7 @@ void Clicker::displayHistory() {
         time_t timeExecution =  this->_history[i].getTimeExecution();
 
         cout << "Nom de la tache : " << this->_history[i].getName() << endl;
-        cout << "Date : " << std::ctime(&timeExecution);
+        cout << "Heure : " << std::ctime(&timeExecution);
         cout << "Duree : " << this->_history[i].getDuration().count() << " secondes" << endl;
     }    
 }

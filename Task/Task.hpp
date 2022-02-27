@@ -2,7 +2,7 @@
 #define TASK_HPP
 
 #include "../Click/Click.hpp"
-#include "../Date/Date.hpp"
+#include "../Time/Time.hpp"
 
 class Task {
     private:
@@ -12,7 +12,7 @@ class Task {
         bool _isInfiniteCycle;
         bool _isScheduled;
         int _timeInterval;
-        Date _timeExecution;
+        Time _timeExecution;
 
     public:
         Task(std::string name, int cycleRepetitions = 1, bool isInfiniteCycle = false, bool isScheduled = false, int timeInterval = 0);
@@ -34,7 +34,7 @@ class Task {
         int getHourTime();
         int getMinutesTime();
         int getSecondsTime();
-        void setTimeExecution(Date timeExecution);
+        void setTimeExecution(Time timeExecution);
         
         void display();
         void run();

@@ -74,7 +74,7 @@ int Task::getSecondsTime() {
     return this->_timeExecution.getSeconds();
 }
 
-void Task::setTimeExecution(Date timeExecution) {
+void Task::setTimeExecution(Time timeExecution) {
 	this->_timeExecution = timeExecution;
 }
 
