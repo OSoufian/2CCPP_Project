@@ -17,15 +17,27 @@ int Time::getHour() {
     return this->_hour;
 }
 
+void Time::setHour(int hour) {
+    this->_hour = hour;
+}
+
 int Time::getMinutes() {
     return this->_minutes;
+}
+
+void Time::setMinutes(int minutes) {
+    this->_minutes = minutes;
 }
 
 int Time::getSeconds() {
     return this->_seconds;
 }
 
-bool Time::isCurrentTime() {
+void Time::setSeconds(int seconds) {
+    this->_seconds = seconds;
+}
+
+bool Time::isNow() {
     time_t now = time(0);
     tm *ltm = localtime(&now);
 

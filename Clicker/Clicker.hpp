@@ -35,6 +35,10 @@ public:
    
     void historyMenu();
     void displayHistory();
+
+    void saveTaskMenu();
+    void writeTasks(std::string fileName);
+    void readTasks(std::string fileName);
 };
 
 #endif // CLICKER_HPP

@@ -1,5 +1,6 @@
 #include <iostream>
 #include <windows.h>
+#include <fstream>
 #include "Task.hpp"
 #include <vector>
 
@@ -127,4 +128,62 @@ void Task::run() {
 			cycles--;
 		}
 	}
+}
+
+void Task::write(std::ofstream* file) {
+
+	*file << _name << std::endl;
+	*file << _cycleRepetitions << std::endl;
+	*file << _isInfiniteCycle << std::endl;
+	*file << _isScheduled << std::endl;
+	*file << _timeInterval << std::endl;
+
+	*file << _timeExecution.getHour() << std::endl;
+	*file << _timeExecution.getMinutes() << std::endl;
+	*file << _timeExecution.getSeconds() << std::endl;
+
+	int count = _clicks.size();
+	*file << count<< std::endl;
+	for (int i = 0; i < count; i++) {
+		_clicks[i].write(file);
+	}
+	
+}
+
+Task Task::read(std::ifstream* file) {
+
+	Task task;
+
+	std::string content;
+	*file >> content;
+	task.setName(content);
+
+	int value;
+	*file >> value;
+	task.setCycleRepetitions(value);
+		
+	*file >> value;
+	task.setIsInfiniteCycle(value);
+
+	*file >> value;
+	task.setIsScheduled(value);
+
+	*file >> value;
+	task.setTimeInterval(value);
+	
+	Time time;
+	*file >> value;
+	time.setHour(value);
+	*file >> value;
+	time.setMinutes(value);
+	*file >> value;
+	time.setSeconds(value);
+	task.setTimeExecution(time);
+
+	*file >> value;
+	for (int i = 0; i < value; i++) {
+		task.addClick(Click::read(file));
+	}
+
+	return task;
 }

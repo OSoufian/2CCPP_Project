@@ -12,9 +12,15 @@ int keyPressed(int key){
 
 int main(){
     while(true){
+        POINT point;
+
         if(keyPressed(VK_LBUTTON)) {
-           cout << "Click gauche\n";         
+            cout << "Click gauche\n";            
+            if (GetCursorPos(&point)) {
+            cout << point.x << "," << point.y << "\n";
+            }
         }
+
         if(keyPressed(VK_RBUTTON)) {
             cout << "Click droit\n";   
         }

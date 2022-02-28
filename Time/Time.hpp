@@ -1,7 +1,6 @@
 #ifndef TIME_HPP
 #define TIME_HPP
 
-
 class Time {
     private:
         int _hour;
@@ -13,10 +12,12 @@ class Time {
         Time();
         ~Time() = default;
         int getHour();
+        void setHour(int hour);
         int getMinutes();
+        void setMinutes(int minutes);
         int getSeconds();
-        bool isCurrentTime();
-    
+        void setSeconds(int seconds);
+        bool isNow();
 };
 
 #endif // TIME_HPP
