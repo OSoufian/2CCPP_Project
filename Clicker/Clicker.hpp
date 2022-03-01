@@ -23,6 +23,7 @@ public:
 
     void addTaskMenu();
     bool isDigit(std::string input);
+    int keyPressed(int key);
 
     void renameTaskMenu();
     bool validTaskIndex(int taskIndex);    
@@ -38,8 +39,8 @@ public:
 
     void saveTaskMenu();
     void writeTasks(std::string fileName);
-    void readTasks(std::string fileName);
-    bool Clicker::isValidFileName(string nameFile);
+    bool readTasks(std::string fileName);
+    bool isValidFileName(std::string nameFile);
 };
 
 #endif // CLICKER_HPP

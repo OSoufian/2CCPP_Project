@@ -38,6 +38,7 @@ class Task {
         
         void display();
         void run();
+        void Task::scheduledRun();
 
         void write(std::ofstream *file);
         static Task read(std::ifstream *file);

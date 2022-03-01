@@ -4,7 +4,7 @@
 #include "Task.hpp"
 #include <vector>
 
-using namespace
+using namespace std;
 
 Task::Task(string name, int cycleRepetitions, bool isInfiniteCycle, bool isScheduled, int timeInterval) {
 	this->_name = name;
@@ -87,8 +87,11 @@ void Task::run() {
 	string stopTask;
 	bool isInfiniteCycle = this->_isInfiniteCycle;
 
-	cout << "Press 'P' to enable and 'S' to disable autoclicker\n";
+	if (this->_isScheduled) {
+		while (!this->_timeExecution.isNow()) Sleep(1000);
+	}	
 
+	cout << "Press 'P' to enable and 'S' to disable autoclicker\n";	
 	while (cycles != 0 || isInfiniteCycle) {
 		if (GetAsyncKeyState('P')) {
 			click = true;

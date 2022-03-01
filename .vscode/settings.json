@@ -47,6 +47,7 @@
         "chrono": "cpp",
         "ratio": "cpp",
         "sstream": "cpp",
-        "fstream": "cpp"
+        "fstream": "cpp",
+        "thread": "cpp"
     }
 }
