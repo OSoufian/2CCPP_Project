@@ -4,7 +4,9 @@
 #include "Task.hpp"
 #include <vector>
 
-Task::Task(std::string name, int cycleRepetitions, bool isInfiniteCycle, bool isScheduled, int timeInterval) {
+using namespace
+
+Task::Task(string name, int cycleRepetitions, bool isInfiniteCycle, bool isScheduled, int timeInterval) {
 	this->_name = name;
 	this->_cycleRepetitions = cycleRepetitions;
 	this->_isInfiniteCycle = isInfiniteCycle;
@@ -15,15 +17,15 @@ Task::Task(std::string name, int cycleRepetitions, bool isInfiniteCycle, bool is
 Task::Task() {
 }
 
-std::string Task::getName() {
+string Task::getName() {
 	return this->_name;
 }
 
-void Task::setName(std::string name) {
+void Task::setName(string name) {
 	this->_name = name;
 }
 
-std::vector<Click> Task::getClicks() {
+vector<Click> Task::getClicks() {
 	return this->_clicks;
 }
 
@@ -82,10 +84,10 @@ void Task::setTimeExecution(Time timeExecution) {
 void Task::run() {
 	bool click = false;
 	int cycles = this->_cycleRepetitions;
-	std::string stopTask;
+	string stopTask;
 	bool isInfiniteCycle = this->_isInfiniteCycle;
 
-	std::cout << "Press 'P' to enable and 'S' to disable autoclicker\n";
+	cout << "Press 'P' to enable and 'S' to disable autoclicker\n";
 
 	while (cycles != 0 || isInfiniteCycle) {
 		if (GetAsyncKeyState('P')) {
@@ -95,10 +97,10 @@ void Task::run() {
 			click = false;
 			if (isInfiniteCycle) {
 				system("cls");
-				std::cout << "Voulez vous arrêter la tâche? ([O]oui/[n]non)\n";
+				cout << "Voulez vous arrêter la tâche? ([O]oui/[n]non)\n";
 				bool valid = false;
 				do {
-					std::cin >> stopTask;
+					cin >> stopTask;
 					if (stopTask == "oui" || stopTask == "o" || stopTask == "O" || stopTask == "non" || stopTask == "n" || stopTask == "N") {
 						if (stopTask == "oui" || stopTask == "o" || stopTask == "O") {
 							isInfiniteCycle = false;
@@ -130,33 +132,28 @@ void Task::run() {
 	}
 }
 
-void Task::write(std::ofstream* file) {
+void Task::write(ofstream *file) {
+	*file << this->_name << endl;
+	*file << this->_cycleRepetitions << endl;
+	*file << this->_isInfiniteCycle << endl;
+	*file << this->_isScheduled << endl;
+	*file << this->_timeInterval << endl;
 
-	*file << _name << std::endl;
-	*file << _cycleRepetitions << std::endl;
-	*file << _isInfiniteCycle << std::endl;
-	*file << _isScheduled << std::endl;
-	*file << _timeInterval << std::endl;
+	*file << this->_timeExecution.getHour() << endl;
+	*file << this->_timeExecution.getMinutes() << endl;
+	*file << this->_timeExecution.getSeconds() << endl;
 
-	*file << _timeExecution.getHour() << std::endl;
-	*file << _timeExecution.getMinutes() << std::endl;
-	*file << _timeExecution.getSeconds() << std::endl;
-
-	int count = _clicks.size();
-	*file << count<< std::endl;
-	for (int i = 0; i < count; i++) {
-		_clicks[i].write(file);
-	}
-	
+	int clicks = this->_clicks.size();
+	*file << clicks << endl;
+	for (int i = 0; i < clicks; i++) this->_clicks[i].write(file);	
 }
 
-Task Task::read(std::ifstream* file) {
-
+Task Task::read(ifstream *file) {
 	Task task;
 
-	std::string content;
-	*file >> content;
-	task.setName(content);
+	string name;
+	*file >> name;
+	task.setName(name);
 
 	int value;
 	*file >> value;
@@ -181,9 +178,7 @@ Task Task::read(std::ifstream* file) {
 	task.setTimeExecution(time);
 
 	*file >> value;
-	for (int i = 0; i < value; i++) {
-		task.addClick(Click::read(file));
-	}
+	for (int i = 0; i < value; i++) task.addClick(Click::read(file));
 
 	return task;
 }

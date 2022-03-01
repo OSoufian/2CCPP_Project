@@ -421,11 +421,11 @@ void Clicker::runTaskMenu() {
             valid = true;
     } while (!valid);
 
-    auto start = std::chrono::system_clock::now();
+    auto start = chrono::system_clock::now();
     this->_tasks[stoi(taskIndex) - 1].run();
-    auto end = std::chrono::system_clock::now();
-    std::time_t start_time = std::chrono::system_clock::to_time_t(start);
-    std::time_t end_time = std::chrono::system_clock::to_time_t(end);
+    auto end = chrono::system_clock::now();
+    time_t start_time = chrono::system_clock::to_time_t(start);
+    time_t end_time = chrono::system_clock::to_time_t(end);
     History history(this->_tasks[stoi(taskIndex) - 1].getName(), start_time, end - start);
     this->_history.push_back(history);
 
@@ -437,7 +437,7 @@ void Clicker::runTaskMenu() {
 void Clicker::duplicateTaskMenu() {
     string taskIndex;
     Task newTask;
-    std::string newTaskName;
+    string newTaskName;
     bool valid = false;
 
     system("cls");
@@ -487,31 +487,27 @@ void Clicker::displayHistory() {
         time_t timeExecution = this->_history[i].getTimeExecution();
 
         cout << "Nom de la tache : " << this->_history[i].getName() << endl;
-        cout << "Heure : " << std::ctime(&timeExecution);
+        cout << "Heure : " << ctime(&timeExecution);
         cout << "Duree : " << this->_history[i].getDuration().count() << " secondes" << endl;
     }
 }
 
 // IMPORTER/SAUVEGARDER TACHES
 
-void Clicker::writeTasks(std::string fileName) {
-    int count = this->_tasks.size();
-    std::ofstream file(fileName);
-    file << count << std::endl;
-    for (int i = 0; i < count; i++) {
-        this->_tasks[i].write(&file);
-    }
+void Clicker::writeTasks(string fileName) {
+    int tasks = this->_tasks.size();
+    ofstream file(fileName);
+    file << tasks << endl;
+    for (int i = 0; i < tasks; i++) this->_tasks[i].write(&file);
     file.close();
 }
 
-void Clicker::readTasks(std::string fileName) {
+void Clicker::readTasks(string fileName) {
 	ifstream file;
 	file.open(fileName, ios::in);
-	int count;
-	file >> count;
-	for (int i = 0; i < count; i++) {
-		this->_tasks.push_back(Task::read(&file));
-	}
+	int tasks;
+	file >> tasks;
+	for (int i = 0; i < tasks; i++) this->_tasks.push_back(Task::read(&file));
 	file.close();
 }
 
@@ -524,35 +520,45 @@ void Clicker::saveTaskMenu() {
     cout << "<------------ MENU DES SAUVEGARDES ------------>\n\n";
     cout << "Retour au menu principal [R]\n";
     cout << "Quitter [Q]\n\n";
-    cout << "Voulez-vous sauvegarder ou importer une sauvegarde de taches ? (s/i)\n";
+    cout << "Voulez-vous sauvegarder ou importer une sauvegarde de taches ? (S/I)\n";
     do {
         valid = false;
         getline(cin, saveOrImport);
-        if (saveOrImport != "")
+        if (saveOrImport == "I" || saveOrImport == "I" || saveOrImport == "S" || saveOrImport == "s")
             valid = true;
     } while (!valid);
 
-    if (saveOrImport == "s") {
+    if (saveOrImport == "s" || saveOrImport == "S") {
         cout << "Quel est le nom du fichier dans lequel vous voulez sauvegarder ? \n";
         do {
-        valid = false;
-        getline(cin, fileName);
-        if (fileName != "")
-            valid = true;
+            valid = false;
+            getline(cin, fileName);
+            if (isValidFileName(fileName)) valid = true;
         } while (!valid);
         writeTasks(fileName);
     }
 
-    else if (saveOrImport == "i") {
+    else if (saveOrImport == "i" || saveOrImport == "I") {
         cout << "Quel est le nom du fichier dans lequel est votre sauvegarde ? \n";
         do {
         valid = false;
         getline(cin, fileName);
-        if (fileName != "")
-            valid = true;
+        if (fileName != "") valid = true;
         } while (!valid);
         readTasks(fileName);
     }
 
     mainMenu();
+}
+
+bool Clicker::isValidFileName(string nameFile) {
+    for (int i; i<nameFile.size(); i++) {
+        if (nameFile[i] == ' ' || nameFile[i] == '\\' ||
+            nameFile[i] == '/' || nameFile[i] == ':' ||
+            nameFile[i] == '*' || nameFile[i] == '?' ||
+            nameFile[i] == '"' || nameFile[i] == '<' ||
+            nameFile[i] == '>' || nameFile[i] == '|')
+        return false;
+    }
+    return true;
 }

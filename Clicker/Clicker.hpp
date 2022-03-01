@@ -39,6 +39,7 @@ public:
     void saveTaskMenu();
     void writeTasks(std::string fileName);
     void readTasks(std::string fileName);
+    bool Clicker::isValidFileName(string nameFile);
 };
 
 #endif // CLICKER_HPP

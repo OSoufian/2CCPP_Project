@@ -39,8 +39,8 @@ class Task {
         void display();
         void run();
 
-        void write(std::ofstream* file);
-        static Task read(std::ifstream* file);
+        void write(std::ofstream *file);
+        static Task read(std::ifstream *file);
 };
 
 #endif // TASK_HPP

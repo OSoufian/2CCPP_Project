@@ -3,6 +3,8 @@
 
 #include "Click.hpp"
 
+using namespace std;
+
 Click::Click(int x, int y, DWORD type, bool isHeld,  int duration) {
     this->_position[0] = x;
     this->_position[1] = y;
@@ -50,15 +52,15 @@ void Click::setDuration(int duration) {
     this->_duration = duration;
 }
 
-void Click::write(std::ofstream* file) {
-    *file << _type << std::endl;
-    *file << _duration << std::endl;
-    *file << _position[0] << std::endl;
-    *file << _position[1] << std::endl;
-    *file << _isHeld << std::endl;
+void Click::write(ofstream* file) {
+    *file << _type << endl;
+    *file << _duration << endl;
+    *file << _position[0] << endl;
+    *file << _position[1] << endl;
+    *file << _isHeld << endl;
 }
 
-Click Click::read(std::ifstream* file) {
+Click Click::read(ifstream* file) {
     Click click;
 
     DWORD type;

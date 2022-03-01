@@ -16,13 +16,12 @@ int main(){
 
         if(keyPressed(VK_LBUTTON)) {
             cout << "Click gauche\n";            
-            if (GetCursorPos(&point)) {
-            cout << point.x << "," << point.y << "\n";
-            }
+            if (GetCursorPos(&point)) cout << point.x << "," << point.y << "\n";
         }
 
         if(keyPressed(VK_RBUTTON)) {
-            cout << "Click droit\n";   
+            cout << "Click droit\n";  
+            if (GetCursorPos(&point)) cout << point.x << "," << point.y << "\n";  
         }
     }
     return 0;
