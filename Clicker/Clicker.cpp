@@ -181,7 +181,7 @@ int Clicker::ClickType2(){
 }
 
 bool Clicker::isHeld(int posx, int posy){
-    if(keyPressed(VK_LBUTTON) || keyPressed(VK_RBUTTON)) {
+    if(keyPressed(VK_LBUTTON)) {
         mouse_event(ClickType(), posx, posy, 0, 0);
         return true;
     }
@@ -309,7 +309,7 @@ void Clicker::addTaskMenu() {
             POINT point;
             while(hearing) {
                 int pos[2];
-                if((keyPressed(VK_LBUTTON) || keyPressed(VK_RBUTTON)) && GetCursorPos(&point)) {
+                if(keyPressed(VK_LBUTTON) && GetCursorPos(&point)) {
                     pos[0] = point.x;
                     pos[1] = point.y;
                     SetCursorPos(pos[0], pos[1]);
@@ -321,7 +321,7 @@ void Clicker::addTaskMenu() {
                         pos[0] = point.x;
                         pos[1] = point.y;
                     }
-                } while(!keyPressed(VK_LBUTTON) || !keyPressed(VK_RBUTTON));
+                } while(!keyPressed(VK_LBUTTON));
                 int counter = 0;
                 while(isHeld(pos[0], pos[1])){
                     if (GetCursorPos(&point)) {
@@ -451,7 +451,6 @@ void runScheduledTask(Task task) {
 	while (!task.getTimeExecution().isNow()) Sleep(1000);
 	task.run();
 }
-
 
 // RENOMMER UNE TACHE
 
