@@ -8,8 +8,8 @@
 
 void runScheduledTask(Task task);
 
-
-class Clicker {
+class Clicker
+{
 private:
     std::vector<Task> _tasks;
     std::vector<History> _history;
@@ -30,14 +30,14 @@ public:
     int keyPressed(int key);
 
     void renameTaskMenu();
-    bool validTaskIndex(int taskIndex);    
+    bool validTaskIndex(int taskIndex);
 
     void deleteTaskMenu();
 
     void runTaskMenu();
 
-    void duplicateTaskMenu();    
-   
+    void duplicateTaskMenu();
+
     void historyMenu();
     void displayHistory();
 
@@ -45,9 +45,10 @@ public:
     void writeTasks(std::string fileName);
     bool readTasks(std::string fileName);
     bool isValidFileName(std::string nameFile);
-    bool isHeld(int posx, int posy);
-    int ClickType2();
-    int ClickType();
+    bool isHeld(int posx, int posy, int key);
+    DWORD ClickType2(int key);
+    DWORD ClickType(int key);
+    Click captureClick(int key);
 };
 
 #endif // CLICKER_HPP
