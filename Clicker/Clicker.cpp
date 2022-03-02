@@ -10,6 +10,10 @@
 
 using namespace std;
 
+struct Int2 {
+    int a[2];
+};
+
 Clicker::Clicker() {
     // Task task("Tache 1");
     // Click click(0, 0, MOUSEEVENTF_LEFTDOWN, false, 0);
@@ -143,6 +147,42 @@ bool Clicker::getActionWithoutInput(char action) {
     }
 }
 
+int Clicker::keyPressed(int key){
+    return (GetKeyState(key) & 1 != 0);
+}
+
+int Clicker::ClickType(){
+    if(keyPressed(VK_LBUTTON)){
+        return MOUSEEVENTF_LEFTDOWN;
+    }
+    if(keyPressed(VK_RBUTTON)){
+        return MOUSEEVENTF_RIGHTDOWN;
+    }
+    return 0;
+}
+
+int Clicker::ClickType2(){
+    if(keyPressed(VK_LBUTTON)){
+        return MOUSEEVENTF_LEFTDOWN + 0x0002;
+    }
+    if(keyPressed(VK_RBUTTON)){
+        return MOUSEEVENTF_RIGHTDOWN + 0x0002;
+    }
+    return 0;
+}
+
+bool Clicker::isHeld(int posx, int posy){
+    if(keyPressed(VK_LBUTTON) || keyPressed(VK_RBUTTON)) {
+        mouse_event(ClickType(), posx, posy, 0, 0);
+        return true;
+    }
+    else {
+        mouse_event(ClickType2(), posx, posy, 0, 0);
+        return false;
+    }
+
+}
+
 // AJOUTER UNE TACHE
 
 void Clicker::addTaskMenu() {
@@ -210,29 +250,30 @@ void Clicker::addTaskMenu() {
     } while (!valid);
 
     do {
-        std::cout << "Voulez vous maintenir votre click ? ([o]oui/[N]non)\n";
-        do {
-            valid = false;
-            std::cin >> clickHeld;
-            if (clickHeld == "oui" || clickHeld == "o" || clickHeld == "O" || clickHeld == "non" || clickHeld == "n" || clickHeld == "N") {
-                if (clickHeld == "oui" || clickHeld == "o")
-                    isClickHeld = true;
-                else
-                    isClickHeld = false;
-                valid = true;
-            }
-        } while (!valid);
-
-        if (isClickHeld) {
-            std::cout << "Quel est la duree de votre clique (en secondes) ?\n";
-            do {
-                valid = false;
-                std::cin >> clickDuration;
-                valid = isDigit(clickDuration);
-            } while (!valid);
-        }
 
         if (consoleOrCapture == "c") {
+            std::cout << "Voulez vous maintenir votre click ? ([o]oui/[N]non)\n";
+            do {
+                valid = false;
+                std::cin >> clickHeld;
+                if (clickHeld == "oui" || clickHeld == "o" || clickHeld == "O" || clickHeld == "non" || clickHeld == "n" || clickHeld == "N") {
+                    if (clickHeld == "oui" || clickHeld == "o")
+                        isClickHeld = true;
+                    else
+                        isClickHeld = false;
+                    valid = true;
+                }
+            } while (!valid);
+
+            if (isClickHeld) {
+                std::cout << "Quel est la duree de votre clique (en secondes) ?\n";
+                do {
+                    valid = false;
+                    std::cin >> clickDuration;
+                    valid = isDigit(clickDuration);
+                } while (!valid);
+            }
+
             std::cout << "Quel est le type de votre clique ? ([g]gauche/[d]droit)\n";
             do {
                 valid = false;
@@ -256,25 +297,46 @@ void Clicker::addTaskMenu() {
         }
         else {
             std::cout << "Veuillez cliquer sur l'ecran pour enregistrer votre click !\n";
-            while (!userClicked) {
-                POINT point;
-                if(keyPressed(VK_LBUTTON)) {
-                    clickType = MOUSEEVENTF_LEFTDOWN;
+            vector<Int2> moves;
+            bool hearing = true;
+            POINT point;
+            while(hearing) {
+                int pos[2];
+                if((keyPressed(VK_LBUTTON) || keyPressed(VK_RBUTTON)) && GetCursorPos(&point)) {
+                    pos[0] = point.x;
+                    pos[1] = point.y;
+                    SetCursorPos(pos[0], pos[1]);
+                    mouse_event(ClickType(), pos[0], pos[1], 0, 0);
+                    mouse_event(ClickType2(), pos[0], pos[1], 0, 0);
+                }
+                do {
                     if (GetCursorPos(&point)) {
-                        positionClick[0] = point.x;
-                        positionClick[1] = point.y;
+                        pos[0] = point.x;
+                        pos[1] = point.y;
                     }
-                    userClicked = true;
+                } while(!keyPressed(VK_LBUTTON) || !keyPressed(VK_RBUTTON));
+                int counter = 0;
+                while(isHeld(pos[0], pos[1])){
+                    if (GetCursorPos(&point)) {
+                        moves.push_back({point.x, point.y});
+                    }
+                    Sleep(100);
+                    counter += 100;
                 }
 
-                if(keyPressed(VK_RBUTTON)) {
-                    clickType = MOUSEEVENTF_RIGHTDOWN; 
-                    if (GetCursorPos(&point)) {
-                        positionClick[0] = point.x;
-                        positionClick[1] = point.y;
-                    }
-                    userClicked = true;
+                for (int i = 0; i < moves.size(); i++)
+                {
+                    int posi[2];
+                    posi[0] = moves[i].a[0];
+                    posi[1] = moves[i].a[1];
+                    cout << posi[0] << "," << posi[1] << "\n";
                 }
+                
+                cout << counter << endl;
+                cout << "Click gauche\n";
+                cout << pos[0] << "," << pos[1] << "\n";
+
+                hearing = false;
             };
             
         }
@@ -379,9 +441,6 @@ bool Clicker::isDigit(string input) {
     return true;
 }
 
-int Clicker::keyPressed(int key) {
-    return (GetAsyncKeyState(key) & 0x8000 != 0);
-}
 
 // RENOMMER UNE TACHE
 

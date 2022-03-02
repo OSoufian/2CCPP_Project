@@ -41,6 +41,9 @@ public:
     void writeTasks(std::string fileName);
     bool readTasks(std::string fileName);
     bool isValidFileName(std::string nameFile);
+    bool isHeld(int posx, int posy);
+    int ClickType2();
+    int ClickType();
 };
 
 #endif // CLICKER_HPP
