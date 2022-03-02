@@ -34,11 +34,11 @@ class Task {
         int getHourTime();
         int getMinutesTime();
         int getSecondsTime();
+        Time getTimeExecution();
         void setTimeExecution(Time timeExecution);
         
         void display();
         void run();
-        void scheduledRun();
 
         void write(std::ofstream *file);
         static Task read(std::ifstream *file);

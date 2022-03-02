@@ -7,6 +7,7 @@
 
 #include "Clicker.hpp"
 #include "../Time/Time.hpp"
+#include "../Task/Task.hpp"
 
 using namespace std;
 
@@ -122,12 +123,20 @@ void Clicker::displayTasks() {
 
         cout << "Heure d'execution : ";
         if (this->_tasks[i].getIsScheduled()) {
-            cout << this->_tasks[i].getHourTime() << ":"
-                 << this->_tasks[i].getMinutesTime() << ":"
-                 << this->_tasks[i].getSecondsTime() << endl;
+            int hour = this->_tasks[i].getHourTime();
+            int minutes = this->_tasks[i].getMinutesTime();
+            int seconds = this->_tasks[i].getSecondsTime();
+
+            if (hour < 10) cout << "0" << hour << ":";
+            else cout << hour << ":";
+            if (minutes < 10) cout << "0" << minutes << ":";
+            else cout << minutes << ":";
+            if (seconds < 10) cout << "0" << seconds << endl;
+            else cout << seconds << endl;
         }
         else
             cout << "lancement manuel\n";
+        cout << endl;
     }
 }
 
@@ -180,7 +189,6 @@ bool Clicker::isHeld(int posx, int posy){
         mouse_event(ClickType2(), posx, posy, 0, 0);
         return false;
     }
-
 }
 
 // AJOUTER UNE TACHE
@@ -225,7 +233,6 @@ void Clicker::addTaskMenu() {
     } while (!valid);
 
     // ------------------ Instructions pour un clique ------------------ //
-    system("cls");
     std::cout << "Quel est le nombre de cliques que vous voulez dans votre cycle?\n";
     do {
         valid = false;
@@ -324,8 +331,7 @@ void Clicker::addTaskMenu() {
                     counter += 100;
                 }
 
-                for (int i = 0; i < moves.size(); i++)
-                {
+                for (int i = 0; i < moves.size(); i++) {
                     int posi[2];
                     posi[0] = moves[i].a[0];
                     posi[1] = moves[i].a[1];
@@ -383,7 +389,7 @@ void Clicker::addTaskMenu() {
         valid = false;
         std::cin >> scheduled;
         if (scheduled == "oui" || scheduled == "o" || scheduled == "O" || scheduled == "non" || scheduled == "n" || scheduled == "N") {
-            if (scheduled == "oui" || scheduled == "o") {
+            if (scheduled == "oui" || scheduled == "o"|| scheduled == "O") {
                 isScheduled = true;
                 task.setIsScheduled(isScheduled);
             }
@@ -399,7 +405,7 @@ void Clicker::addTaskMenu() {
             valid = false;
             std::cin >> hour;
             if (isDigit(hour))
-                if (stoi(hour) >= 1 && stoi(hour) < 24)
+                if (stoi(hour) >= 0 && stoi(hour) < 24)
                     valid = true;
         } while (!valid);
 
@@ -408,7 +414,7 @@ void Clicker::addTaskMenu() {
             valid = false;
             std::cin >> minutes;
             if (isDigit(minutes))
-                if (stoi(minutes) >= 1 && stoi(minutes) < 60)
+                if (stoi(minutes) >= 0 && stoi(minutes) < 60)
                     valid = true;
         } while (!valid);
 
@@ -417,7 +423,7 @@ void Clicker::addTaskMenu() {
             valid = false;
             std::cin >> seconds;
             if (isDigit(seconds))
-                if (stoi(seconds) >= 1 && stoi(seconds) < 60)
+                if (stoi(seconds) >= 0 && stoi(seconds) < 60)
                     valid = true;
         } while (!valid);
         task.setTimeExecution(Time(stoi(hour), stoi(minutes), stoi(seconds)));
@@ -427,7 +433,7 @@ void Clicker::addTaskMenu() {
     task.setTimeInterval(stoi(timeInterval));
     this->_tasks.push_back(task);
     
-    // thread t1(task.run());
+    thread t1(runScheduledTask, task);
     // t1.join();
 
     mainMenu();
@@ -439,6 +445,11 @@ bool Clicker::isDigit(string input) {
             return false;
     }
     return true;
+}
+
+void runScheduledTask(Task task) {
+	while (!task.getTimeExecution().isNow()) Sleep(1000);
+	task.run();
 }
 
 
@@ -590,7 +601,7 @@ void Clicker::displayHistory() {
 
         cout << "Nom de la tache : " << this->_history[i].getName() << endl;
         cout << "Heure : " << ctime(&timeExecution);
-        cout << "Duree : " << this->_history[i].getDuration().count() << " secondes" << endl;
+        cout << "Duree : " << this->_history[i].getDuration().count() << " secondes\n\n";
     }
 }
 

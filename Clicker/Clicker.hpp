@@ -5,6 +5,10 @@
 
 #include "../Task/Task.hpp"
 #include "../History/History.hpp"
+
+void runScheduledTask(Task task);
+
+
 class Clicker {
 private:
     std::vector<Task> _tasks;
