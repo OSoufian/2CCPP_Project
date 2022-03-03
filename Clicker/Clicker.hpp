@@ -22,13 +22,10 @@ public:
     bool getActionWithoutInput(char action);
 
     void tasksList();    
-    void displayTasks();
-
-         
+    void displayTasks();        
 
     void addTask();
-    bool isDigit(std::string input);
-    int keyPressed(int key);
+    bool isDigit(std::string input);   
 
     void renameTask();
     bool validTaskIndex(int taskIndex);
@@ -36,6 +33,11 @@ public:
     void deleteTask();
 
     void runTask();
+    int keyPressed(int key);
+    DWORD notHeldClickType(int key);
+    DWORD heldClickType(int key);
+    bool isHeld(int posx, int posy, int key);    
+    Click captureClick(int key);
 
     void duplicateTask();
 
@@ -46,10 +48,8 @@ public:
     void writeTasks(std::string fileName);
     bool readTasks(std::string fileName);
     bool isValidFileName(std::string nameFile);
-    bool isHeld(int posx, int posy, int key);
-    DWORD ClickType2(int key);
-    DWORD ClickType(int key);
-    Click captureClick(int key);
+    
+    
 };
 
 #endif // CLICKER_HPP

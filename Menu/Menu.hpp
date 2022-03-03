@@ -4,14 +4,7 @@
 class Menu {
     public:
         static void mainMenu();
-        static void tasksListMenu();
-        static void addTaskMenu();
-        static void renameTaskMenu();
-        static void deleteTaskMenu();
-        static void runTaskMenu();
-        static void duplicateTaskMenu();  
-        static void saveTaskMenu();
-        static void historyTaskMenu();        
+        static void showMenu(std::string menuName);
 };
 
 #endif // MENU_HPP

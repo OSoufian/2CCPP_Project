@@ -10,7 +10,7 @@
 using namespace std;
 
 int main() {
-    SetConsoleOutputCP(65001);
+    SetConsoleOutputCP(65001); // Active l'utf-8 dans le terminal
     Clicker SUPINFOAutoClicker;
     return 0;
 }

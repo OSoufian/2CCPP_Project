@@ -15,8 +15,7 @@ class Click {
     public:
         Click(int x, int y, DWORD type, bool isHeld = false, int duration = 0);
         Click();
-        ~Click() = default;
-        
+        ~Click() = default;        
 
         int getX();
         int getY();
