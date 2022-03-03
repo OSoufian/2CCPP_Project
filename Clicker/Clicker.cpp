@@ -8,129 +8,104 @@
 #include "Clicker.hpp"
 #include "../Time/Time.hpp"
 #include "../Task/Task.hpp"
+#include "../Menu/Menu.hpp"
 
 using namespace std;
 
-struct Int2
-{
+struct Int2 {
     int a[2];
 };
 
-Clicker::Clicker()
-{
-    // Task task("Tache 1");
-    // Click click(0, 0, MOUSEEVENTF_LEFTDOWN, false, 0);
-    // task.setClick(click);
-    // task.setIsInfiniteCycle(true);
-    // task.setTimeInterval(1);
-    // this->_tasks.push_back(task);
+Clicker::Clicker() {
     mainMenu();
 }
 
-// MENU PRINCIPAL
-
-void Clicker::mainMenu()
-{
+void Clicker::mainMenu() {
     string action;
     bool valid = false;
 
-    do
-    {
-        system("cls");
-        cout << "<------------ Bienvenue dans SUPINFO Auto Clicker ------------>\n\n";
-        cout << "Voir la liste des taches [V]\n";
-        cout << "Ajouter une tache [A]\n";
-        cout << "Renommer une tache [R]\n";
-        cout << "Dupliquer une tache [D]\n";
-        cout << "Supprimer une tache [S]\n";
-        cout << "Lancer une tache [L]\n";
-        cout << "Importer/Sauvegarder [I]\n";
-        cout << "Consulter l'historique des taches [H]\n";
-        cout << "Quitter [Q]\n";
+    do {
+        Menu::mainMenu();
         cin >> action;
         valid = getMainAction(action);
     } while (!valid);
 }
 
-bool Clicker::getMainAction(string action)
-{
-    if (action == "V" || action == "v")
-    {
-        tasksListMenu();
+bool Clicker::getMainAction(string action) {
+    if (action == "V" || action == "v") {
+        tasksList();
         return true;
     }
-    else if (action == "A" || action == "a")
-    {
-        addTaskMenu();
+    else if (action == "A" || action == "a") {
+        addTask();
         return true;
     }
-    else if (action == "R" || action == "r")
-    {
-        renameTaskMenu();
+    else if (action == "R" || action == "r") {
+        renameTask();
         return true;
     }
-    else if (action == "S" || action == "s")
-    {
-        deleteTaskMenu();
+    else if (action == "S" || action == "s") {
+        deleteTask();
         return true;
     }
-    else if (action == "D" || action == "d")
-    {
-        duplicateTaskMenu();
+    else if (action == "D" || action == "d") {
+        duplicateTask();
         return true;
     }
-    else if (action == "L" || action == "l")
-    {
-        runTaskMenu();
+    else if (action == "L" || action == "l") {
+        runTask();
         return true;
     }
-    else if (action == "H" || action == "h")
-    {
-        historyMenu();
+    else if (action == "H" || action == "h") {
+        history();
         return true;
     }
-    else if (action == "I" || action == "i")
-    {
-        saveTaskMenu();
+    else if (action == "I" || action == "i") {
+        saveTask();
         return true;
     }
-    else if (action == "Q" || action == "q")
-    {
+    else if (action == "Q" || action == "q") {
         exit(0);
     }
-    else
-    {
+    else {
         return false;
     }
 }
 
-// LISTE DES TACHES
+bool Clicker::getActionWithoutInput(char action) {
+    system("cls");
+    switch (action) {
+    case 'r':
+    case 'R':
+        mainMenu();
+        return true;
+        break;
+    case 'q':
+    case 'Q':
+        exit(0);
+    default:
+        return false;
+    }
+}
 
-void Clicker::tasksListMenu()
-{
+void Clicker::tasksList() {
     char action;
     bool valid = false;
-    do
-    {
-        system("cls");
-        cout << "<------------ Voici la liste des taches ------------>\n\n";
+    do {
+        Menu::tasksListMenu();
         displayTasks();
-        cout << "\nRetour au menu principal [R]\n";
-        cout << "Quitter [Q]\n\n";
         cin >> action;
         valid = getActionWithoutInput(action);
     } while (!valid);
 }
 
-void Clicker::displayTasks()
-{
-    for (int i = 0; i < this->_tasks.size(); i++)
-    {
+void Clicker::displayTasks() {
+    for (int i = 0; i < this->_tasks.size(); i++) {
         cout << this->_tasks[i].getName() << ":" << endl;
         for (int j = 0; j < this->_tasks[i].getClicks().size(); j++) {
             cout << "Position du clique " << (j + 1) << ": (" << this->_tasks[i].getClicks()[j].getX() << ", " << this->_tasks[i].getClicks()[j].getY() << ")" << endl;
             if (this->_tasks[i].getClicks()[j].getIsHeld())
-                cout << "Le temps de maintien du clique est de : " << this->_tasks[i].getClicks()[j].getDuration() << endl;
+                cout << "Le temps de maintien du clique est de : " << this->_tasks[i].getClicks()[j].getDuration() << " secondes"<< endl;
         }
 
         cout << "Nombres de repetions du cycle : ";
@@ -165,31 +140,11 @@ void Clicker::displayTasks()
     }
 }
 
-bool Clicker::getActionWithoutInput(char action)
-{
-    system("cls");
-    switch (action)
-    {
-    case 'r':
-    case 'R':
-        mainMenu();
-        return true;
-        break;
-    case 'q':
-    case 'Q':
-        exit(0);
-    default:
-        return false;
-    }
-}
-
-int Clicker::keyPressed(int key)
-{
+int Clicker::keyPressed(int key) {
     return (GetKeyState(key) & 1 != 0);
 }
 
-DWORD Clicker::ClickType(int key)
-{
+DWORD Clicker::ClickType(int key) {
     if (key == VK_LBUTTON)
         return 0x0002;
     if (key == VK_RBUTTON)
@@ -197,8 +152,7 @@ DWORD Clicker::ClickType(int key)
     return 0;
 }
 
-DWORD Clicker::ClickType2(int key)
-{
+DWORD Clicker::ClickType2(int key) {
     if (key == VK_LBUTTON)
         return 0x0004;
     if (key == VK_RBUTTON)
@@ -206,29 +160,24 @@ DWORD Clicker::ClickType2(int key)
     return 0;
 }
 
-bool Clicker::isHeld(int posx, int posy, int key)
-{
-    if (keyPressed(key))
-    {
+bool Clicker::isHeld(int posx, int posy, int key) {
+    if (keyPressed(key)) {
         mouse_event(ClickType(key), posx, posy, 0, 0);
         return true;
     }
-    if (!keyPressed(key))
-    {
+    if (!keyPressed(key)) {
         mouse_event(ClickType2(key), posx, posy, 0, 0);
         return false;
     }
     return false;
 }
 
-Click Clicker::captureClick(int key)
-{
+Click Clicker::captureClick(int key) {
     vector<Int2> moves;
     bool hearing = true;
     POINT point;
     int pos[2];
-    while (hearing)
-    {
+    while (hearing) {
         if (keyPressed(key) && GetCursorPos(&point)) {
             pos[0] = point.x;
             pos[1] = point.y;
@@ -238,8 +187,7 @@ Click Clicker::captureClick(int key)
         }
 
         do {
-            if (GetCursorPos(&point))
-            {
+            if (GetCursorPos(&point)) {
                 pos[0] = point.x;
                 pos[1] = point.y;
             }
@@ -269,8 +217,7 @@ Click Clicker::captureClick(int key)
 
 // AJOUTER UNE TACHE
 
-void Clicker::addTaskMenu()
-{
+void Clicker::addTask() {
     bool valid = false;
     int steps;
 
@@ -298,13 +245,10 @@ void Clicker::addTaskMenu()
     bool isClickCapturing;
     bool userClicked = false;
 
-    system("cls");
-    std::cout << "<------------ Creation d'une tache ------------>\n\n";
-    std::cout << "Retour au menu principal [R]\n";
-    std::cout << "Quitter [Q]\n\n";
+    Menu::addTaskMenu();
+
     std::cout << "Quel est le nom de la tache ?\n";
-    do
-    {
+    do {
         getline(std::cin, taskName);
         if (taskName != "")
             valid = true;
@@ -312,8 +256,7 @@ void Clicker::addTaskMenu()
 
     // ------------------ Instructions pour un clique ------------------ //
     std::cout << "Quel est le nombre de cliques que vous voulez dans votre cycle?\n";
-    do
-    {
+    do {
         valid = false;
         std::cin >> numberClicks;
         steps = stoi(numberClicks);
@@ -323,8 +266,7 @@ void Clicker::addTaskMenu()
     Task task(taskName);
 
     std::cout << "Voulez vous entrer vos clicks a la console ou cliquer directement ? ([c]console/[d]directement)\n";
-    do
-    {
+    do {
         valid = false;
         std::cin >> consoleOrCapture;
         if (consoleOrCapture == "c" || consoleOrCapture == "d") {
@@ -336,13 +278,10 @@ void Clicker::addTaskMenu()
         }
     } while (!valid);
 
-    do
-    {
-
+    do {
         if (consoleOrCapture == "c") {
             std::cout << "Voulez vous maintenir votre click ? ([o]oui/[N]non)\n";
-            do
-            {
+            do {
                 valid = false;
                 std::cin >> clickHeld;
                 if (clickHeld == "oui" || clickHeld == "o" || clickHeld == "O" || clickHeld == "non" || clickHeld == "n" || clickHeld == "N")
@@ -355,8 +294,7 @@ void Clicker::addTaskMenu()
                 }
             } while (!valid);
 
-            if (isClickHeld)
-            {
+            if (isClickHeld) {
                 std::cout << "Quel est la duree de votre clique (en secondes) ?\n";
                 do
                 {
@@ -367,8 +305,7 @@ void Clicker::addTaskMenu()
             }
 
             std::cout << "Quel est le type de votre clique ? ([g]gauche/[d]droit)\n";
-            do
-            {
+            do {
                 valid = false;
                 std::cin >> typeClick;
                 if (typeClick == "d" || typeClick == "g")
@@ -382,8 +319,7 @@ void Clicker::addTaskMenu()
             } while (!valid);
 
             std::cout << "Quel est la position de votre clique ? (entrez d'abord le x puis le y)\n";
-            do
-            {
+            do {
                 valid = false;
                 std::cin >> positionConsole[0];
                 std::cin >> positionConsole[1];
@@ -393,8 +329,7 @@ void Clicker::addTaskMenu()
         else {
             std::cout << "Veuillez cliquer sur l'ecran pour enregistrer votre click !\n";
             bool clicked = false;
-            while (!clicked)
-            {
+            while (!clicked) {
                 if (keyPressed(VK_LBUTTON))
                 {
                     task.addClick(captureClick(VK_LBUTTON));
@@ -415,19 +350,16 @@ void Clicker::addTaskMenu()
     } while (steps != 0);
 
     std::cout << "Voulez vous que le cycle se repete indefiniment? (oui/non)\n";
-    do
-    {
+    do {
         valid = false;
         std::cin >> infiniteCycle;
         if (infiniteCycle == "oui" || infiniteCycle == "o" || infiniteCycle == "non" || infiniteCycle == "n" || infiniteCycle == "N") {
-            if (infiniteCycle == "oui" || infiniteCycle == "o")
-            {
+            if (infiniteCycle == "oui" || infiniteCycle == "o") {
                 isInfiniteCycle = true;
                 task.setIsInfiniteCycle(isInfiniteCycle);
                 valid = true;
             }
-            else
-            {
+            else {
                 isInfiniteCycle = false;
                 task.setIsInfiniteCycle(isInfiniteCycle);
                 std::cout << "Combien de fois le cycle dois se répéter?\n";
@@ -437,21 +369,18 @@ void Clicker::addTaskMenu()
         }
     } while (!valid);
     std::cout << "Combien de secondes avant de recommencer un cycle ?\n";
-    do
-    {
+    do {
         valid = false;
         std::cin >> timeInterval;
         valid = isDigit(timeInterval);
     } while (!valid);
 
     std::cout << "Voulez vous definir une heure d'execution pour cette tache ? ([o]oui/[n]non)\n";
-    do
-    {
+    do {
         valid = false;
         std::cin >> scheduled;
         if (scheduled == "oui" || scheduled == "o" || scheduled == "O" || scheduled == "non" || scheduled == "n" || scheduled == "N") {
-            if (scheduled == "oui" || scheduled == "o" || scheduled == "O")
-            {
+            if (scheduled == "oui" || scheduled == "o" || scheduled == "O") {
                 isScheduled = true;
                 task.setIsScheduled(isScheduled);
             }
@@ -461,8 +390,7 @@ void Clicker::addTaskMenu()
         }
     } while (!valid);
 
-    if (isScheduled)
-    {
+    if (isScheduled) {
         std::cout << "A quelle heure ?\n";
         do {
             valid = false;
@@ -502,18 +430,15 @@ void Clicker::addTaskMenu()
     mainMenu();
 }
 
-bool Clicker::isDigit(string input)
-{
-    for (int i = 0; i < input.size(); i++)
-    {
+bool Clicker::isDigit(string input) {
+    for (int i = 0; i < input.size(); i++) {
         if (!isdigit(input[i]))
             return false;
     }
     return true;
 }
 
-void runScheduledTask(Task task)
-{
+void runScheduledTask(Task task) {
     while (!task.getTimeExecution().isNow())
         Sleep(1000);
     task.run();
@@ -521,29 +446,22 @@ void runScheduledTask(Task task)
 
 // RENOMMER UNE TACHE
 
-void Clicker::renameTaskMenu()
-{
+void Clicker::renameTask() {
     char action;
     bool valid = false;
 
     string taskIndex;
     string newTaskName;
 
-    system("cls");
-    cout << "<------------ Renommer une tache ------------>\n\n";
-    cout << "Retour au menu principal [R]\n";
-    cout << "Quitter [Q]\n\n";
-    cout << "Quel est le numéro de la tache ?\n";
-    do
-    {
+    Menu::renameTaskMenu();
+    do {
         cin >> taskIndex;
         if (isDigit(taskIndex) && validTaskIndex(stoi(taskIndex)))
             valid = true;
     } while (!valid);
 
     cout << "Quel est le nouveau nom pour cette tache ? \n";
-    do
-    {
+    do {
         valid = false;
         getline(cin, newTaskName);
         if (newTaskName != "")
@@ -555,8 +473,7 @@ void Clicker::renameTaskMenu()
     mainMenu();
 }
 
-bool Clicker::validTaskIndex(int taskIndex)
-{
+bool Clicker::validTaskIndex(int taskIndex) {
     if (taskIndex < 1 || taskIndex > this->_tasks.size())
         return false;
     return true;
@@ -564,20 +481,14 @@ bool Clicker::validTaskIndex(int taskIndex)
 
 // SUPPRIMER UNE TACHE
 
-void Clicker::deleteTaskMenu()
-{
+void Clicker::deleteTask() {
     bool valid = false;
 
     string taskIndex;
     string newTaskName;
 
-    system("cls");
-    cout << "<------------ SUPPRIMER une tache ------------>\n\n";
-    cout << "Retour au menu principal [R]\n";
-    cout << "Quitter [Q]\n\n";
-    cout << "Quel est le numéro de la tache ?\n";
-    do
-    {
+    Menu::deleteTaskMenu();
+    do {
         cin >> taskIndex;
         if (isDigit(taskIndex) && validTaskIndex(stoi(taskIndex)))
             valid = true;
@@ -590,19 +501,14 @@ void Clicker::deleteTaskMenu()
 
 // LANCER UNE TACHE
 
-void Clicker::runTaskMenu()
-{
+void Clicker::runTask() {
     bool valid = false;
 
     string taskIndex;
 
-    system("cls");
-    cout << "<------------ Lancer une tache ------------>\n\n";
-    cout << "Retour au menu principal [R]\n";
-    cout << "Quitter [Q]\n\n";
+    Menu::runTaskMenu();
     cout << "Quel est le numéro de la tache ?\n";
-    do
-    {
+    do {
         cin >> taskIndex;
         if (isDigit(taskIndex) && validTaskIndex(stoi(taskIndex)))
             valid = true;
@@ -621,28 +527,22 @@ void Clicker::runTaskMenu()
 
 // DUPLIQUER UNE TACHE
 
-void Clicker::duplicateTaskMenu()
-{
+void Clicker::duplicateTask() {
     string taskIndex;
     Task newTask;
     string newTaskName;
     bool valid = false;
 
-    system("cls");
-    cout << "<------------ DUPLIQUER une tache ------------>\n\n";
-    cout << "Retour au menu principal [R]\n";
-    cout << "Quitter [Q]\n\n";
+    Menu::duplicateTaskMenu();
     cout << "Quel est le numéro de la tache que vous voulez ?\n";
-    do
-    {
+    do {
         cin >> taskIndex;
         if (isDigit(taskIndex) && validTaskIndex(stoi(taskIndex)))
             valid = true;
     } while (!valid);
 
     cout << "Quel est le nom pour cette nouvelle tache ? \n";
-    do
-    {
+    do {
         valid = false;
         getline(cin, newTaskName);
         if (newTaskName != "")
@@ -658,26 +558,19 @@ void Clicker::duplicateTaskMenu()
 
 // HISTORIQUE DES TACHES
 
-void Clicker::historyMenu()
-{
+void Clicker::history() {
     char action;
     bool valid = false;
-    do
-    {
-        system("cls");
-        cout << "<------------ HISTORIQUE DES TACHES ------------>\n\n";
+    do {
+        Menu::historyTaskMenu();
         displayHistory();
-        cout << "\nRetour au menu principal [R]\n";
-        cout << "Quitter [Q]\n\n";
         cin >> action;
         valid = getActionWithoutInput(action);
     } while (!valid);
 }
 
-void Clicker::displayHistory()
-{
-    for (int i = 0; i < this->_history.size(); i++)
-    {
+void Clicker::displayHistory() {
+    for (int i = 0; i < this->_history.size(); i++) {
         time_t timeExecution = this->_history[i].getTimeExecution();
 
         cout << "Nom de la tache : " << this->_history[i].getName() << endl;
@@ -688,8 +581,7 @@ void Clicker::displayHistory()
 
 // IMPORTER/SAUVEGARDER TACHES
 
-void Clicker::writeTasks(string fileName)
-{
+void Clicker::writeTasks(string fileName) {
     int tasks = this->_tasks.size();
     ofstream file(fileName);
     file << tasks << endl;
@@ -698,8 +590,7 @@ void Clicker::writeTasks(string fileName)
     file.close();
 }
 
-bool Clicker::readTasks(string fileName)
-{
+bool Clicker::readTasks(string fileName) {
     ifstream file;
     file.open(fileName, ios::in);
     if (file.fail())
@@ -712,27 +603,21 @@ bool Clicker::readTasks(string fileName)
     return true;
 }
 
-void Clicker::saveTaskMenu()
-{
+void Clicker::saveTask() {
     bool valid = false;
     string saveOrImport;
     string fileName;
 
-    system("cls");
-    cout << "<------------ MENU DES SAUVEGARDES ------------>\n\n";
-    cout << "Retour au menu principal [R]\n";
-    cout << "Quitter [Q]\n\n";
+    Menu::saveTaskMenu();
     cout << "Voulez-vous sauvegarder ou importer une sauvegarde de taches ? (S/I)\n";
-    do
-    {
+    do {
         valid = false;
         getline(cin, saveOrImport);
         if (saveOrImport == "I" || saveOrImport == "i" || saveOrImport == "S" || saveOrImport == "s")
             valid = true;
     } while (!valid);
 
-    if (saveOrImport == "s" || saveOrImport == "S")
-    {
+    if (saveOrImport == "s" || saveOrImport == "S") {
         cout << "Quel est le nom du fichier dans lequel vous voulez sauvegarder ? \n";
         do {
             valid = false;
@@ -744,12 +629,10 @@ void Clicker::saveTaskMenu()
         writeTasks(fileName);
     }
 
-    else if (saveOrImport == "i" || saveOrImport == "I")
-    {
+    else if (saveOrImport == "i" || saveOrImport == "I") {
         cout << "Quel est le nom du fichier dans lequel est votre sauvegarde ? \n";
         do {
-            do
-            {
+            do {
                 valid = false;
                 getline(cin, fileName);
                 if (fileName != "")
@@ -764,10 +647,8 @@ void Clicker::saveTaskMenu()
     mainMenu();
 }
 
-bool Clicker::isValidFileName(string nameFile)
-{
-    for (int i; i < nameFile.size(); i++)
-    {
+bool Clicker::isValidFileName(string nameFile) {
+    for (int i; i < nameFile.size(); i++) {
         if (nameFile[i] == ' ' || nameFile[i] == '\\' ||
             nameFile[i] == '/' || nameFile[i] == ':' ||
             nameFile[i] == '*' || nameFile[i] == '?' ||

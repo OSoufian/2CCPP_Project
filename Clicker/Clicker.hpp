@@ -8,8 +8,7 @@
 
 void runScheduledTask(Task task);
 
-class Clicker
-{
+class Clicker {
 private:
     std::vector<Task> _tasks;
     std::vector<History> _history;
@@ -18,30 +17,33 @@ public:
     Clicker();
     ~Clicker() = default;
 
+    
+
+    void tasksList();
+
     void mainMenu();
-    bool getMainAction(std::string action);
-
-    void tasksListMenu();
     void displayTasks();
-    bool getActionWithoutInput(char action);
 
-    void addTaskMenu();
+    bool getMainAction(std::string action);
+    bool getActionWithoutInput(char action);     
+
+    void addTask();
     bool isDigit(std::string input);
     int keyPressed(int key);
 
-    void renameTaskMenu();
+    void renameTask();
     bool validTaskIndex(int taskIndex);
 
-    void deleteTaskMenu();
+    void deleteTask();
 
-    void runTaskMenu();
+    void runTask();
 
-    void duplicateTaskMenu();
+    void duplicateTask();
 
-    void historyMenu();
+    void history();
     void displayHistory();
 
-    void saveTaskMenu();
+    void saveTask();
     void writeTasks(std::string fileName);
     bool readTasks(std::string fileName);
     bool isValidFileName(std::string nameFile);
