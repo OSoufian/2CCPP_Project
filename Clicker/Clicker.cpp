@@ -12,8 +12,8 @@
 
 using namespace std;
 
-struct Int2 {
-    int a[2];
+struct Position {
+    int position[2];
 };
 
 Clicker::Clicker() {
@@ -103,39 +103,32 @@ void Clicker::displayTasks() {
     for (int i = 0; i < this->_tasks.size(); i++) {
         cout << this->_tasks[i].getName() << ":" << endl;
         for (int j = 0; j < this->_tasks[i].getClicks().size(); j++) {
-            cout << "Position du clique " << (j + 1) << ": (" << this->_tasks[i].getClicks()[j].getX() << ", " << this->_tasks[i].getClicks()[j].getY() << ")" << endl;
+            cout << "Position du clic " << (j + 1) << ": (" << this->_tasks[i].getClicks()[j].getX() << ", " << this->_tasks[i].getClicks()[j].getY() << ")" << endl;
             if (this->_tasks[i].getClicks()[j].getIsHeld())
-                cout << "Le temps de maintien du clique est de : " << this->_tasks[i].getClicks()[j].getDuration() << " secondes"<< endl;
+                cout << "Le temps de maintien du clic est de : " << this->_tasks[i].getClicks()[j].getDuration() << " secondes"<< endl;
         }
 
-        cout << "Nombres de repetions du cycle : ";
+        cout << "Nombres de répétitions du cycle : ";
         if (this->_tasks[i].getIsInfiniteCycle())
             cout << "En boucle !" << endl;
         else
             cout << this->_tasks[i].getCycleRepetitions() << endl;
         cout << "Temps d'intervalle entre 2 cycles: " << this->_tasks[i].getTimeInterval() << " secondes\n";
 
-        cout << "Heure d'execution : ";
+        cout << "Heure d'exécution : ";
         if (this->_tasks[i].getIsScheduled()) {
             int hour = this->_tasks[i].getHourTime();
             int minutes = this->_tasks[i].getMinutesTime();
             int seconds = this->_tasks[i].getSecondsTime();
 
-            if (hour < 10)
-                cout << "0" << hour << ":";
-            else
-                cout << hour << ":";
-            if (minutes < 10)
-                cout << "0" << minutes << ":";
-            else
-                cout << minutes << ":";
-            if (seconds < 10)
-                cout << "0" << seconds << endl;
-            else
-                cout << seconds << endl;
+            if (hour < 10) cout << "0" << hour << ":";
+            else cout << hour << ":";
+            if (minutes < 10) cout << "0" << minutes << ":";
+            else cout << minutes << ":";
+            if (seconds < 10) cout << "0" << seconds << endl;
+            else cout << seconds << endl;
         }
-        else
-            cout << "lancement manuel\n";
+        else cout << "lancement manuel\n";
         cout << endl;
     }
 }
@@ -173,7 +166,7 @@ bool Clicker::isHeld(int posx, int posy, int key) {
 }
 
 Click Clicker::captureClick(int key) {
-    vector<Int2> moves;
+    vector<Position> moves;
     bool hearing = true;
     POINT point;
     int pos[2];
@@ -204,8 +197,8 @@ Click Clicker::captureClick(int key) {
 
         for (int i = 0; i < moves.size(); i++) {
             int posi[2];
-            posi[0] = moves[i].a[0];
-            posi[1] = moves[i].a[1];
+            posi[0] = moves[i].position[0];
+            posi[1] = moves[i].position[1];
         }
         
         hearing = false;
@@ -247,15 +240,15 @@ void Clicker::addTask() {
 
     Menu::addTaskMenu();
 
-    std::cout << "Quel est le nom de la tache ?\n";
+    std::cout << "Quel est le nom de la tâche ?\n";
     do {
         getline(std::cin, taskName);
         if (taskName != "")
             valid = true;
     } while (!valid);
 
-    // ------------------ Instructions pour un clique ------------------ //
-    std::cout << "Quel est le nombre de cliques que vous voulez dans votre cycle?\n";
+    // ------------------ Instructions pour un clic ------------------ //
+    std::cout << "Quel est le nombre de clics que vous voulez dans votre cycle?\n";
     do {
         valid = false;
         std::cin >> numberClicks;
@@ -295,7 +288,7 @@ void Clicker::addTask() {
             } while (!valid);
 
             if (isClickHeld) {
-                std::cout << "Quel est la duree de votre clique (en secondes) ?\n";
+                std::cout << "Quel est la duree de votre clic (en secondes) ?\n";
                 do
                 {
                     valid = false;
@@ -304,7 +297,7 @@ void Clicker::addTask() {
                 } while (!valid);
             }
 
-            std::cout << "Quel est le type de votre clique ? ([g]gauche/[d]droit)\n";
+            std::cout << "Quel est le type de votre clic ? ([g]gauche/[d]droit)\n";
             do {
                 valid = false;
                 std::cin >> typeClick;
@@ -318,7 +311,7 @@ void Clicker::addTask() {
                 }
             } while (!valid);
 
-            std::cout << "Quel est la position de votre clique ? (entrez d'abord le x puis le y)\n";
+            std::cout << "Quel est la position de votre clic ? (entrez d'abord le x puis le y)\n";
             do {
                 valid = false;
                 std::cin >> positionConsole[0];
@@ -327,7 +320,7 @@ void Clicker::addTask() {
             } while (!valid);
         }
         else {
-            std::cout << "Veuillez cliquer sur l'ecran pour enregistrer votre click !\n";
+            std::cout << "Veuillez cliquer sur l'écran pour enregistrer votre click !\n";
             bool clicked = false;
             while (!clicked) {
                 if (keyPressed(VK_LBUTTON))
@@ -349,7 +342,7 @@ void Clicker::addTask() {
         steps--;
     } while (steps != 0);
 
-    std::cout << "Voulez vous que le cycle se repete indefiniment? (oui/non)\n";
+    std::cout << "Voulez vous que le cycle se répète indéfiniment? (oui/non)\n";
     do {
         valid = false;
         std::cin >> infiniteCycle;
@@ -375,7 +368,7 @@ void Clicker::addTask() {
         valid = isDigit(timeInterval);
     } while (!valid);
 
-    std::cout << "Voulez vous definir une heure d'execution pour cette tache ? ([o]oui/[n]non)\n";
+    std::cout << "Voulez vous definir une heure d'exécution pour cette tâche ? ([o]oui/[n]non)\n";
     do {
         valid = false;
         std::cin >> scheduled;
@@ -391,7 +384,7 @@ void Clicker::addTask() {
     } while (!valid);
 
     if (isScheduled) {
-        std::cout << "A quelle heure ?\n";
+        std::cout << "À quelle heure ?\n";
         do {
             valid = false;
             std::cin >> hour;
@@ -460,7 +453,7 @@ void Clicker::renameTask() {
             valid = true;
     } while (!valid);
 
-    cout << "Quel est le nouveau nom pour cette tache ? \n";
+    cout << "Quel est le nouveau nom pour cette tâche ? \n";
     do {
         valid = false;
         getline(cin, newTaskName);
@@ -507,7 +500,7 @@ void Clicker::runTask() {
     string taskIndex;
 
     Menu::runTaskMenu();
-    cout << "Quel est le numéro de la tache ?\n";
+    cout << "Quel est le numéro de la tâche ?\n";
     do {
         cin >> taskIndex;
         if (isDigit(taskIndex) && validTaskIndex(stoi(taskIndex)))
@@ -534,14 +527,14 @@ void Clicker::duplicateTask() {
     bool valid = false;
 
     Menu::duplicateTaskMenu();
-    cout << "Quel est le numéro de la tache que vous voulez ?\n";
+    cout << "Quel est le numéro de la tâche que vous voulez ?\n";
     do {
         cin >> taskIndex;
         if (isDigit(taskIndex) && validTaskIndex(stoi(taskIndex)))
             valid = true;
     } while (!valid);
 
-    cout << "Quel est le nom pour cette nouvelle tache ? \n";
+    cout << "Quel est le nom pour cette nouvelle tâche ? \n";
     do {
         valid = false;
         getline(cin, newTaskName);
@@ -573,7 +566,7 @@ void Clicker::displayHistory() {
     for (int i = 0; i < this->_history.size(); i++) {
         time_t timeExecution = this->_history[i].getTimeExecution();
 
-        cout << "Nom de la tache : " << this->_history[i].getName() << endl;
+        cout << "Nom de la tâche : " << this->_history[i].getName() << endl;
         cout << "Heure : " << ctime(&timeExecution);
         cout << "Duree : " << this->_history[i].getDuration().count() << " secondes\n\n";
     }
@@ -609,7 +602,7 @@ void Clicker::saveTask() {
     string fileName;
 
     Menu::saveTaskMenu();
-    cout << "Voulez-vous sauvegarder ou importer une sauvegarde de taches ? (S/I)\n";
+    cout << "Voulez-vous sauvegarder ou importer une sauvegarde de tâches ? (S/I)\n";
     do {
         valid = false;
         getline(cin, saveOrImport);

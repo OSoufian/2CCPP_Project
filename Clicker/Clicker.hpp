@@ -15,17 +15,16 @@ private:
 
 public:
     Clicker();
-    ~Clicker() = default;
-
-    
-
-    void tasksList();
+    ~Clicker() = default;  
 
     void mainMenu();
+    bool getMainAction(std::string action);
+    bool getActionWithoutInput(char action);
+
+    void tasksList();    
     void displayTasks();
 
-    bool getMainAction(std::string action);
-    bool getActionWithoutInput(char action);     
+         
 
     void addTask();
     bool isDigit(std::string input);
