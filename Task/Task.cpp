@@ -3,6 +3,7 @@
 #include <fstream>
 #include "Task.hpp"
 #include <vector>
+#include <limits>
 
 using namespace std;
 
@@ -15,6 +16,11 @@ Task::Task(string name, int cycleRepetitions, bool isInfiniteCycle, bool isSched
 }
 
 Task::Task() {
+	this->_cycleRepetitions = 0;
+	this->_isInfiniteCycle = true;
+	this->_isScheduled = false;
+	this->_timeInterval = 1;
+	this->_timeExecution = Time(0, 0, 0);
 }
 
 string Task::getName() {
@@ -93,7 +99,7 @@ void Task::run() {
 
 	
 	system("cls");
-	cout << "Press 'P' to enable and 'S' to disable autoclicker\n";	
+	cout << "Appuyer sur 'P' pour exécuter la tâche et 'S' pour la stopper\n";	
 	while (cycles != 0 || isInfiniteCycle) {
 		if (GetAsyncKeyState('P')) {
 			click = true;
@@ -110,6 +116,10 @@ void Task::run() {
 						if (stopTask == "oui" || stopTask == "o" || stopTask == "O") {
 							isInfiniteCycle = false;
 							return;
+						}
+						else {
+							system("cls");
+							cout << "Appuyer sur 'P' pour exécuter la tâche et 'S' pour la stopper\n";
 						}
 						valid = true;
 					}

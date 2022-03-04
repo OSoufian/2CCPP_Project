@@ -11,6 +11,9 @@ Time::Time(int hour, int minutes, int seconds) {
 }
 
 Time::Time() {
+    this->_hour = 0;
+    this->_minutes = 0;
+    this->_seconds = 0;
 }
 
 int Time::getHour() {

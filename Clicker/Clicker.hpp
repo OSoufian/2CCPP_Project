@@ -20,6 +20,7 @@ public:
     void mainMenu();
     bool getMainAction(std::string action);
     bool getActionWithoutInput(char action);
+    bool getReturnAction(std::string action);
 
     void tasksList();    
     void displayTasks();        

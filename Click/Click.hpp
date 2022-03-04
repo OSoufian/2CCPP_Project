@@ -7,10 +7,9 @@
 class Click {
     private:
         int _position[2];
-        DWORD _type;
+        DWORD _type; // clique gauche ou droit 
         bool _isHeld;
-        int _duration;
-        
+        int _duration;        
 
     public:
         Click(int x, int y, DWORD type, bool isHeld = false, int duration = 0);

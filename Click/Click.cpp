@@ -13,7 +13,11 @@ Click::Click(int x, int y, DWORD type, bool isHeld,  int duration) {
     this->_duration = duration;
 }
 
-Click::Click() {}
+Click::Click() {
+    this->_type = VK_LBUTTON;
+    this->_isHeld = false;
+    this->_duration = 0;
+}
 
 int Click::getX(){
     return this->_position[0];

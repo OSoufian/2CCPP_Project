@@ -37,7 +37,6 @@ class Task {
         Time getTimeExecution();
         void setTimeExecution(Time timeExecution);
         
-        void display();
         void run();
 
         void write(std::ofstream *file);
