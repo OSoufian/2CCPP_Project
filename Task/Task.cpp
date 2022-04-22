@@ -99,7 +99,7 @@ void Task::run() {
 
 	
 	system("cls");
-	cout << "Appuyer sur 'P' pour exécuter la tâche et 'S' pour la stopper\n";	
+	cout << "Appuyer sur 'P' pour exécuter la tâche et 'S' pour la stopper\n";
 	while (cycles != 0 || isInfiniteCycle) {
 		if (GetAsyncKeyState('P')) {
 			click = true;

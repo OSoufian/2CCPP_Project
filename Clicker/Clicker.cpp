@@ -13,12 +13,6 @@
 using namespace std;
 
 Clicker::Clicker() {
-    // Task task("taskName");
-    // Click click(0, 0, VK_LBUTTON);
-    // task.addClick(click);
-    // task.setCycleRepetitions(1);
-    // task.setTimeInterval(1);
-    // this->_tasks.push_back(task);
     mainMenu();
 }
 
@@ -122,7 +116,7 @@ void Clicker::displayTasks() {
             Click click = task.getClicks()[j];
             cout << "Position du clic " << (j + 1) << ": (" << click.getX() << ", " << click.getY() << ")" << endl;
             cout << "Type du clic: ";
-            if (click.getType() == VK_LBUTTON)
+            if (click.getType() == MOUSEEVENTF_LEFTDOWN)
                 cout << "gauche\n";
             else
                 cout << "droit\n";
@@ -165,35 +159,6 @@ void Clicker::displayTasks() {
         cout << endl;
     }
 }
-
-// void Clicker::displayTasks() {
-//     for (int i = 0; i < this->_tasks.size(); i++) {
-//         cout << this->_tasks[i].getName() << ":" << endl;
-//         for (int j = 0; j < this->_tasks[i].getClicks().size(); j++)
-//         {
-//             cout << "Position du clique " << (j + 1) << ": (" << this->_tasks[i].getClicks()[j].getX() << ", " << this->_tasks[i].getClicks()[j].getY() << ")" << endl;
-//             if (this->_tasks[i].getClicks()[j].getIsHeld())
-//                 cout << "Le temps de maintien du clique est de : " << this->_tasks[i].getClicks()[j].getDuration() << endl;
-//         }
-
-//         cout << "Nombres de repetions du cycle : ";
-//         if (this->_tasks[i].getIsInfiniteCycle())
-//             cout << "En boucle !" << endl;
-//         else
-//             cout << this->_tasks[i].getCycleRepetitions() << endl;
-//         cout << "Temps d'intervalle entre 2 cycles: " << this->_tasks[i].getTimeInterval() << " secondes\n";
-
-//         cout << "Heure d'execution : ";
-//         if (this->_tasks[i].getIsScheduled())
-//         {
-//             cout << this->_tasks[i].getHourTime() << ":"
-//                  << this->_tasks[i].getMinutesTime() << ":"
-//                  << this->_tasks[i].getSecondsTime() << endl;
-//         }
-//         else
-//             cout << "lancement manuel\n";
-//     }
-// }
 
 int Clicker::keyPressed(int key) {
     return (GetKeyState(key) & 1 != 0);
@@ -295,7 +260,6 @@ void Clicker::addTask() {
     Menu::showMenu("AJOUTER UNE TÂCHE");
     cout << "Quel est le nom de la tâche ?\n";
 
-
     do {
         getline(cin, taskName);
         if (taskName != "")
@@ -313,7 +277,7 @@ void Clicker::addTask() {
     steps = stoi(numberClicks);
     Task task(taskName);
 
-    cout << "Voulez vous entrer vos clicks a la console ou cliquer directement ? ([C]console/[D]directement)\n";
+    cout << "Voulez-vous entrer vos clics a la console ou cliquer directement ? ([C]console/[D]directement)\n";
     do {
         valid = false;
         cin >> consoleOrCapture;
@@ -328,7 +292,7 @@ void Clicker::addTask() {
 
     do {
         if (consoleOrCapture == "c" || consoleOrCapture == "C") {
-            cout << "Voulez vous maintenir votre click ? ([O]oui/[N]non)\n";
+            cout << "Voulez-vous maintenir votre clic ? ([O]oui/[N]non)\n";
             do
             {
                 valid = false;
@@ -345,7 +309,7 @@ void Clicker::addTask() {
 
             if (isClickHeld)
             {
-                cout << "Quel est la duree de votre clic (en secondes) ?\n";
+                cout << "Quelle est la durée de votre clic (en secondes) ?\n";
                 do
                 {
                     valid = false;
@@ -369,7 +333,7 @@ void Clicker::addTask() {
                 }
             } while (!valid && !getReturnAction(typeClick));
 
-            cout << "Quel est la position de votre clic ? (entrez d'abord le x puis le y)\n";
+            cout << "Quelle est la position de votre clic ? (entrez d'abord le x puis le y)\n";
             do
             {
                 valid = false;
@@ -388,7 +352,7 @@ void Clicker::addTask() {
                     task.addClick(captureClick(VK_LBUTTON));
                     clicked = true;
                 }
-                else if (keyPressed(VK_RBUTTON))
+                if (keyPressed(VK_RBUTTON))
                 {
                     task.addClick(captureClick(VK_RBUTTON));
                     clicked = true;
@@ -404,7 +368,7 @@ void Clicker::addTask() {
 
     } while (steps != 0);
 
-    cout << "Voulez vous que le cycle se répète indéfiniment? ([O]oui/[N]non)\n";
+    cout << "Voulez-vous que le cycle se répète indéfiniment? ([O]oui/[N]non)\n";
     do {
         valid = false;
         cin >> infiniteCycle;
@@ -432,7 +396,7 @@ void Clicker::addTask() {
         valid = isDigit(timeInterval);
     } while (!valid && !getReturnAction(timeInterval));
 
-    cout << "Voulez vous definir une heure d'exécution pour cette tâche ? ([O]oui/[N]non)\n";
+    cout << "Voulez-vous définir une heure d'exécution pour cette tâche ? ([O]oui/[N]non)\n";
     do {
         valid = false;
         cin >> scheduled;
@@ -583,7 +547,6 @@ void Clicker::runTask() {
 }
 
 // DUPLIQUER UNE TACHE
-
 void Clicker::duplicateTask() {
     string taskIndex;
     Task newTask;
@@ -637,7 +600,6 @@ void Clicker::displayHistory() {
 }
 
 // IMPORTER/SAUVEGARDER TACHES
-
 void Clicker::writeTasks(string fileName) {
     int tasks = this->_tasks.size();
     ofstream file(fileName);
